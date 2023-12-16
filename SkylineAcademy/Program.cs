@@ -12,12 +12,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(
+builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("IdentityContextConnection")
     ));
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<IdentityContext>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyDbContext>();
@@ -47,6 +47,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
