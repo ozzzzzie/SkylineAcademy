@@ -1,0 +1,55 @@
+﻿@model SkylineAcademy.Models.Student
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br />
+<h1>Create</h1>
+
+<h4>Student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Sfname" class="control-label">First Name</label>
+                <input asp-for="Sfname" class="form-control" />
+                <span asp-validation-for="Sfname" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Slname" class="control-label">Last Name</label>
+                <input asp-for="Slname" class="form-control" />
+                <span asp-validation-for="Slname" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Saddress" class="control-label">Address</label>
+                <input asp-for="Saddress" class="form-control" />
+                <span asp-validation-for="Saddress" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Sphonenumber" class="control-label">Phone Number</label>
+                <input asp-for="Sphonenumber" class="form-control" />
+                <span asp-validation-for="Sphonenumber" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="MajorId" class="control-label">Major</label>
+                <select asp-for="MajorId" class ="form-control" asp-items="ViewBag.MajorId"></select>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Semail" class="control-label">Email</label>
+                <input asp-for="Semail" class="form-control" />
+                <span asp-validation-for="Semail" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

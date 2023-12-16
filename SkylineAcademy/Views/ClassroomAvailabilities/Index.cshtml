@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SkylineAcademy.Models.ClassroomAvailability>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Isavailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Classroom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slot)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isavailable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classroom.ClassroomId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slot.SlotId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ClassroomAvailabilityId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ClassroomAvailabilityId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ClassroomAvailabilityId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

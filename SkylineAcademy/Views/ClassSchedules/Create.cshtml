@@ -1,0 +1,135 @@
+﻿@model SkylineAcademy.Models.ClassSchedule
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br />
+<h1>Create</h1>
+
+<h4>ClassSchedule</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Course ID</label>
+                <input asp-for="CourseId" class="form-control" />
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="AdministratorId" class="control-label">Administrator ID</label>
+                <input asp-for="AdministratorId" class="form-control" />
+                <span asp-validation-for="AdministratorId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="TeacherId" class="control-label">Teacher ID</label>
+                <input asp-for="TeacherId" class="form-control" />
+                <span asp-validation-for="TeacherId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="ClassroomId" class="control-label">Classroom ID</label>
+                <input asp-for="ClassroomId" class="form-control" />
+                <span asp-validation-for="ClassroomId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="SlotId" class="control-label">Slot</label>
+                <select asp-for="SlotId" class ="form-control" asp-items="ViewBag.SlotId"></select><br />
+                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#myModal">Slot</button>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Semester" class="control-label">Semester</label>
+                <input asp-for="Semester" class="form-control" />
+                <span asp-validation-for="Semester" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Academicyear" class="control-label">Academic Year</label>
+                <input asp-for="Academicyear" class="form-control" />
+                <span asp-validation-for="Academicyear" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-xl">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Slot Schedule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <table class="table">
+                              <tr>
+                    <th></th>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                </tr>
+                <tr>
+                    <th>8am to 10am</th>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <th>10am to 12pm</th>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <th>12pm to 2pm</th>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                </tr>
+                <tr>
+                    <th>2pm to 4pm</th>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <th>4pm to 6pm</th>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                </tr>
+                <tr>
+                    <th>6pm to 8pm</th>
+                    <td>26</td>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                </tr>
+            </table>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

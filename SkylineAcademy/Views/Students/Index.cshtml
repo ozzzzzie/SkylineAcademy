@@ -1,0 +1,81 @@
+﻿@model IEnumerable<SkylineAcademy.Models.Student>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<br />
+
+<p>
+    <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+    <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+    <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+<h1 align="center">Students</h1>
+<br />
+<p align="right">
+    <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+</p>
+
+<style>
+    .grid-container {
+        overflow: hidden;
+    }
+    .grid-container table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    .grid-container table td {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+</style>
+
+<div class="table grid-container">
+@(
+Html
+ .Grid(Model)
+ .Build(columns =>
+ {
+     columns.Add(model => model.Sfname).Titled("First Name");
+     columns.Add(model => model.Slname).Titled("Last Name");
+     columns.Add(model => model.Saddress).Titled("Address");
+     columns.Add(model => model.Sphonenumber).Titled("Phone Number");
+     columns.Add(model => model.Semail).Titled("Email");
+     columns.Add(model => model.Major.Mname).Titled("Major");
+
+     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+     {
+         id =
+    model.StudentId
+     })).Filterable(false);
+
+
+     columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+     {
+         id =
+    model.StudentId
+     })).Filterable(false);
+
+
+     columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
+     {
+         id =
+    model.StudentId
+     })).Filterable(false);
+
+ })
+
+ .Empty("No data found")
+ .Filterable()
+ .Sortable()
+ .Pageable(pager =>
+ {
+     pager.RowsPerPage = 10;
+ })
+)
+</div>
+@section Scripts {
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+}

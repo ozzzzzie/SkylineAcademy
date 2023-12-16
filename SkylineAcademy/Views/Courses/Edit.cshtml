@@ -1,0 +1,42 @@
+﻿@model SkylineAcademy.Models.Course
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<br />
+<h1>Edit</h1>
+
+<h4>Course</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CourseId" />
+            <div class="form-group">
+                <label asp-for="Cname" class="control-label">Name</label>
+                <input asp-for="Cname" class="form-control" />
+                <span asp-validation-for="Cname" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="MajorId" class="control-label">Major</label>
+                <select asp-for="MajorId" class="form-control" asp-items="ViewBag.MajorId"></select>
+                <span asp-validation-for="MajorId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Credits" class="control-label">Credits</label>
+                <input asp-for="Credits" class="form-control" />
+                <span asp-validation-for="Credits" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-dark" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

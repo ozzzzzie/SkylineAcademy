@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "Administrator Dashboard";
+}
+
+<br />
+<h1>Administrator Dashboard</h1>
+<br />
+
+
+<table class="table">
+    <tr>
+        <th colspan="3">
+            Administrators
+        </th>
+        <th colspan="3">
+            Teachers
+        </th>
+        <th colspan="3">
+            Students
+        </th>
+    </tr>
+    <tr align="center">
+        <td>
+            <img src="/images/admin.png" alt="Administrator Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Administrators")">
+                <button type="button" class="btn btn-light">Manage Administrators</button>
+            </a>
+
+        </td>
+        <td>
+            <img src="/images/teacher.png" alt="Teacher Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Teachers")">
+                <button type="button" class="btn btn-light">Manage Teachers</button>
+            </a>
+            <br />
+        </td>
+        <td>
+            <img src="/images/students.png" alt="Student Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Students")">
+                <button type="button" class="btn btn-light">Manage Students</button></a>
+
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">
+            Departments
+        </th>
+        <th colspan="3">
+            Jobs
+        </th>
+        <th colspan="3">
+            Faculties
+        </th>
+    </tr>
+    <tr align="center">
+        <td>
+            <img src="/images/department.png" alt="Departments Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Departments")">
+                <button type="button" class="btn btn-light">Manage Departments</button>
+            </a>
+
+        </td>
+        <td>
+            <img src="/images/job.png" alt="Jobs Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Jobs")">
+                <button type="button" class="btn btn-light">Manage Jobs</button>
+            </a>
+            <br />
+        </td>
+        <td>
+            <img src="/images/faculty.png" alt="Faculties Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Faculties")">
+                <button type="button" class="btn btn-light">Manage Faculties</button>
+            </a>
+
+        </td>
+    </tr>
+    <tr>
+        <th colspan="3">
+            Majors
+        </th>
+        <th colspan="3">
+            Courses
+        </th>
+        <th colspan="3">
+            Prerequisites
+        </th>
+    </tr>
+    <tr align="center">
+        <td>
+            <img src="/images/majors.png" alt="Majors Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Majors")">
+                <button type="button" class="btn btn-light">Manage Majors</button>
+            </a>
+
+        </td>
+        <td>
+            <img src="/images/courses.png" alt="Courses Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Courses")">
+                <button type="button" class="btn btn-light">Manage Courses</button>
+            </a>
+            <br />
+        </td>
+        <td>
+            <img src="/images/prerequisite.png" alt="Prerequisites Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Prerequisites")">
+                <button type="button" class="btn btn-light">Manage Class Prerequisites</button>
+            </a>
+
+        </td>
+    </tr>
+    <tr>
+    <th colspan="3">
+        Class Schedules
+    </th>
+    <th colspan="3">
+        Classrooms
+    </th>
+    <th colspan="3">
+        
+    </th>
+    </tr>
+    <tr align="center">
+        <td>
+            <img src="/images/classroom.png" alt="Classess Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "ClassSchedules")">
+                <button type="button" class="btn btn-light">Manage Class Schedules</button>
+            </a>
+        </td>
+        <td>
+            <img src="/images/classroomavailability.png" alt="Classrooms Image" />
+        </td>
+        <td colspan="2">
+            <a href="@Url.Action("Index", "Classrooms")">
+                <button type="button" class="btn btn-light">Manage Classrooms</button>
+            </a>
+
+        </td>
+
+        <td>
+
+        </td>
+        <td colspan="2">
+
+        </td>
+    </tr>
+</table>

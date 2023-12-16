@@ -1,0 +1,38 @@
+﻿@model SkylineAcademy.Models.Prerequisite
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<br />
+<h1>Edit</h1>
+
+<h4>Prerequisite</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Course ID</label>
+                <select asp-for="CourseId" class="form-control" asp-items="ViewBag.CourseId"></select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <br />
+                        <div class="form-group">
+                <label asp-for="PrerequisiteId" class="control-label">Prerequisite ID</label>
+                <select asp-for="PrerequisiteId" class="form-control" asp-items="ViewBag.PrerequisiteId"></select>
+                <span asp-validation-for="PrerequisiteId" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-dark" />
+                 <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,41 @@
+﻿@model SkylineAcademy.Models.Job
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br />
+<h1>Create</h1>
+
+<h4>Job</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Jname" class="control-label">Name</label>
+                <input asp-for="Jname" class="form-control" />
+                <span asp-validation-for="Jname" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Jdescription" class="control-label">Description</label>
+                <input asp-for="Jdescription" class="form-control" />
+                <span asp-validation-for="Jdescription" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="DepartmentId" class="control-label">Department</label>
+                <select asp-for="DepartmentId" class ="form-control" asp-items="ViewBag.DepartmentId"></select>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

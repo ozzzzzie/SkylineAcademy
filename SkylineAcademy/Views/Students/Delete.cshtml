@@ -1,0 +1,57 @@
+﻿@model SkylineAcademy.Models.Student
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<br />
+<h1>Delete</h1>
+<h3>Are you sure you want to delete this Student?</h3>
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            First Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Sfname)
+        </dd>
+        <dt class = "col-sm-2">
+            Last Name
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Slname)
+        </dd>
+        <dt class = "col-sm-2">
+            Address
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Saddress)
+        </dd>
+        <dt class = "col-sm-2">
+            Phone Number
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Sphonenumber)
+        </dd>
+        <dt class = "col-sm-2">
+            Email
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Semail)
+        </dd>
+        <dt class = "col-sm-2">
+           Major
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Major.Mname)
+        </dd>
+    </dl>
+    <br />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="StudentId" />
+       <input type="submit" value="Delete" class="btn btn-danger" />
+        <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+    </form>
+</div>

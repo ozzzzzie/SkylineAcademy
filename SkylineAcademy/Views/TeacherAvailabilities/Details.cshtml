@@ -1,0 +1,36 @@
+﻿@model SkylineAcademy.Models.TeacherAvailability
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TeacherAvailability</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TeacherId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TeacherId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Isavailable)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Isavailable)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Slot)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Slot.SlotId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.TeacherAvailabilityId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

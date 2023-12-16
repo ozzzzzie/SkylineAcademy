@@ -1,0 +1,32 @@
+﻿@model SkylineAcademy.Models.Classroom
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<br/ >
+<h1>Details</h1>
+
+
+<div>
+    <h4>Classroom</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Capacity
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Capacity)
+        </dd>
+        <dt class = "col-sm-2">
+            Facilities
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Facilities)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ClassroomId"><button type="button" class="btn btn-dark">Edit</button></a> 
+    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+</div>
