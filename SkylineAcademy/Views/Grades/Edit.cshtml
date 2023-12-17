@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<br />
 <h1>Edit</h1>
 
 <h4>Grade</h4>
@@ -14,34 +14,31 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="GradeId" />
             <div class="form-group">
-                <label asp-for="EnrollementId" class="control-label"></label>
+                <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
                 <input asp-for="EnrollementId" class="form-control" />
                 <span asp-validation-for="EnrollementId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label asp-for="Midterm" class="control-label"></label>
                 <input asp-for="Midterm" class="form-control" />
                 <span asp-validation-for="Midterm" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label asp-for="Final" class="control-label"></label>
                 <input asp-for="Final" class="form-control" />
                 <span asp-validation-for="Final" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label asp-for="Total" class="control-label"></label>
                 <input asp-for="Total" class="form-control" />
                 <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-dark" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
