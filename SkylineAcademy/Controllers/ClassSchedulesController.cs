@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +19,14 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: ClassSchedules
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.ClassSchedules.Include(c => c.Slot);
             return View(await myDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: ClassSchedules/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,14 +45,14 @@ namespace SkylineAcademy.Controllers
 
             return View(classSchedule);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Create
         public IActionResult Create()
         {
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId");
             return View();
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -67,7 +69,7 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,7 +86,7 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -120,7 +122,7 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,7 +141,7 @@ namespace SkylineAcademy.Controllers
 
             return View(classSchedule);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

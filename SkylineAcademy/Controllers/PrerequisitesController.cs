@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +19,7 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Prerequisites
         public async Task<IActionResult> Index()
         {
@@ -25,7 +27,7 @@ namespace SkylineAcademy.Controllers
                           View(await _context.Prerequisites.ToListAsync()) :
                           Problem("Entity set 'MyDbContext.Prerequisites'  is null.");
         }
-
+        [Authorize]
         // GET: Prerequisites/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,13 +45,13 @@ namespace SkylineAcademy.Controllers
 
             return View(prerequisite);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Prerequisites/Create
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Prerequisites/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -65,7 +67,7 @@ namespace SkylineAcademy.Controllers
             }
             return View(prerequisite);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Prerequisites/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -81,7 +83,7 @@ namespace SkylineAcademy.Controllers
             }
             return View(prerequisite);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Prerequisites/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,7 +118,7 @@ namespace SkylineAcademy.Controllers
             }
             return View(prerequisite);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Prerequisites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,7 +136,7 @@ namespace SkylineAcademy.Controllers
 
             return View(prerequisite);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Prerequisites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

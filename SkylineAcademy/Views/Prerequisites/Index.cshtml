@@ -7,15 +7,47 @@
 <br />
 
 <p>
-    <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
-    <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
-    <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a></a>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><button type="button" class="btn btn-outline-primary">Home</button></a>
+    }
+
 </p>
+
 <h1 align="center">Prerequisites</h1>
 <br />
-<p align="right">
-    <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else if (User.IsInRole("SuperAdmin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else
+{
+    <br />
+}
 
 <div class="table grid-container">
 @(
@@ -26,25 +58,68 @@ Html
      columns.Add(model => model.CourseId).Titled("Course ID");
      columns.Add(model => model.PrerequisiteId).Titled("Prerequisite ID");
 
-@*     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
-     {
-         id =
-    model.CourseId
-     })).Filterable(false);*@
 
 
-     columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-     {
-         id =
-    model.CourseId
-     })).Filterable(false);
+            if (User.IsInRole("Admin"))
+            {
+                @*     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+                        {
+                        id =
+                        model.CourseId
+                        })).Filterable(false);*@
 
 
-     columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
-     {
-         id =
-    model.CourseId
-     })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+            model.CourseId
+                })).Filterable(false);
+
+
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
+                {
+                    id =
+                model.CourseId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("Student"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.CourseId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("Teacher"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.CourseId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("SuperAdmin"))
+            {
+                @*     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+                        {
+                        id =
+                        model.CourseId
+                        })).Filterable(false);*@
+
+
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+            model.CourseId
+                })).Filterable(false);
+
+
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
+                {
+                    id =
+                model.CourseId
+                })).Filterable(false);
+            }
 
  })
 

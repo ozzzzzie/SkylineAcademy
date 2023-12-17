@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +19,14 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Courses
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.Courses.Include(c => c.Major);
             return View(await myDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: Courses/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,7 +45,7 @@ namespace SkylineAcademy.Controllers
 
             return View(course);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Courses/Create
         public IActionResult Create()
         {
@@ -67,7 +69,7 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Courses/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -84,7 +86,7 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -120,7 +122,7 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Courses/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,7 +141,7 @@ namespace SkylineAcademy.Controllers
 
             return View(course);
         }
-
+        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

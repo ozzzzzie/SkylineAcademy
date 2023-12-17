@@ -7,15 +7,47 @@
 <br />
 
 <p>
-    <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
-    <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
-    <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><button type="button" class="btn btn-outline-primary">Home</button></a>
+    }
+
 </p>
+
 <h1 align="center">Jobs</h1>
 <br />
-<p align="right">
-    <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
-</p>
+@if (User.IsInRole("Admin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else if (User.IsInRole("SuperAdmin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else
+{
+    <br />
+}
 
 <style>
     .grid-container {
@@ -38,26 +70,67 @@ Html
      columns.Add(model => model.Jdescription).Titled("Description");
      columns.Add(model => model.Department.Dname).Titled("Department");
 
-     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
-     {
-         id =
-    model.JobId
-     })).Filterable(false);
+
+            if (User.IsInRole("Admin"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
 
 
-     columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-     {
-         id =
-    model.JobId
-     })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
 
 
-     columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
-     {
-         id =
-    model.JobId
-     })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("Student"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("Teacher"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
+            }
+            else if (User.IsInRole("SuperAdmin"))
+            {
+                columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
 
+
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
+
+
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
+                {
+                    id =
+                model.JobId
+                })).Filterable(false);
+            }
  })
 
  .Empty("No data found")
