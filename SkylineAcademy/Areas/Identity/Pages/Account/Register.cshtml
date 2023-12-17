@@ -13,6 +13,26 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
+                <input asp-for="Input.FName" class="form-control" aria-required="true" />
+                <label asp-for="Input.FName">First Name</label>
+                <span asp-validation-for="Input.FName" class="text-danger"></span>
+            </div> <br />
+            <div class="form-floating">
+                <input asp-for="Input.LName" class="form-control" aria-required="true" />
+                <label asp-for="Input.LName">Last Name</label>
+                <span asp-validation-for="Input.LName" class="text-danger"></span>
+            </div> <br />
+            <div class="form-floating">
+                <input asp-for="Input.Address" class="form-control" aria-required="true" />
+                <label asp-for="Input.Address"></label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div> <br />
+            <div class="form-floating">
+                <input asp-for="Input.PhoneNumber" class="form-control" aria-required="true" />
+                <label asp-for="Input.PhoneNumber">Phone Number</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div> <br />
+            <div class="form-floating">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
                 <label asp-for="Input.Email"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -27,6 +47,13 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div> <br />
+            <div class="form-floating">
+                <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-control" aria-required="true">
+                    <option disabled selected value="0">Select Role...</option>
+                </select>
+                <label asp-for="Input.Role"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div><br />
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>
     </div>
