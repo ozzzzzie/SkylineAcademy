@@ -106,10 +106,10 @@ namespace SkylineAcademy.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
-            public string FName { get; set; }
-            public string LName { get; set; }
-            public string Address { get; set; }
-            public string PhoneNumber { get; set; }
+            //public string FName { get; set; }
+            //public string LName { get; set; }
+            //public string Address { get; set; }
+            //public string PhoneNumber { get; set; }
 
             public string Role { get; set; }
 
@@ -152,10 +152,10 @@ namespace SkylineAcademy.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
-                user.FName = Input.FName;
-                user.Lname = Input.LName;
-                user.Address = Input.Address;
-                user.PhoneNumber = Input.PhoneNumber;
+                //user.FName = Input.FName;
+                //user.Lname = Input.LName;
+                //user.Address = Input.Address;
+                //user.PhoneNumber = Input.PhoneNumber;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

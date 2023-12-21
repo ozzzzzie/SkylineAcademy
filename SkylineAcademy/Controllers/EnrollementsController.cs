@@ -62,9 +62,22 @@ namespace SkylineAcademy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
         {
+              var stuEnr = _context.ClassSchedules.Where(e => e.ScheduleId == enrollement.ScheduleId).FirstOrDefault();
+
+                List<Prerequisite> crses = _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToList();
+
+                foreach (Prerequisite i in crses)
+                {
+                    var chk  = _context.Enrollements.Where(x=> x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).Count();
+
+                    if (chk == 0)
+                    {
+                        ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
+                    }
+                } 
             if (ModelState.IsValid)
             {
-                _context.Add(enrollement);
+                 _context.Add(enrollement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

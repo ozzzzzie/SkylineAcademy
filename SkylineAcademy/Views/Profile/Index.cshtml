@@ -1,0 +1,64 @@
+﻿@model Teacher
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<br />
+<h1>Profile Information</h1>
+<hr />
+<br />
+<h5>Name:</h5>
+<strong> @Model.Tfname @Model.Tlname </strong>
+<br />
+<br />
+<h5>Phone Number:</h5>
+<strong> @Model.Tphonenumber </strong>
+<br />
+<br />
+<h5>Address:</h5>
+<strong> @Model.Taddress </strong>
+<br />
+<br />
+<h5>Email:</h5>
+<strong> @Model.Email </strong>
+<br />
+<br />
+<h5>Faculty:</h5>
+
+            @if (Model.FacultyId == 1)
+            {
+                <text><strong>Faculty of Arts</strong></text>    
+            } else if (Model.FacultyId == 2)
+            {
+                <text><strong>Faculty of Science </strong></text> 
+            } else if (Model.FacultyId ==3)
+            {
+                <text><strong>Faculty of Engineering</strong></text>    
+            } else if (Model.FacultyId == 4) 
+            {
+                <text><strong>Faculty of Computer Science</strong></text>    
+            } else if (Model.FacultyId == 5)
+            {
+                <text><strong>Faculty of Communication</strong></text>
+            } else
+            {
+                <text><strong>Unknown</strong></text>
+            }
+
+<br />
+<br />
+<h5>Head of Faculty: </h5>
+
+@if (Model.Ishead == true)
+{
+    <text><strong>Yes</strong></text>
+} else
+{
+    <text><strong>No</strong></text>
+}
+
+
+<br /><br /><br /><br />
+
+<h6>To edit any information on this page, please contact the relevant administrator.</h6>

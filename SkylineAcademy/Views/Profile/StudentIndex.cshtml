@@ -1,0 +1,135 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<br />
+<h1>Profile Information</h1>
+<hr />
+<br />
+<h5>Name:</h5>
+<strong> @Model.Sfname @Model.Slname </strong>
+<br />
+<br />
+<h5>Phone Number:</h5>
+<strong> @Model.Sphonenumber </strong>
+<br />
+<br />
+<h5>Address:</h5>
+<strong> @Model.Saddress </strong>
+<br />
+<br />
+<h5>Email:</h5>
+<strong> @Model.Semail </strong>
+<br />
+<br />
+<h5>Major:</h5>
+
+@if (Model.MajorId == 1) {
+    <text><strong>English Literature</strong></text>
+
+}
+else if (Model.MajorId == 2)
+{
+    <text><strong>Fine Arts</strong></text>
+
+}
+else if (Model.MajorId == 3)
+{
+    <text><strong>History</strong></text>
+
+}
+else if (Model.MajorId == 4)
+{
+    <text><strong>Music Performance</strong></text>
+
+}
+else if (Model.MajorId == 5)
+{
+    <text><strong>Biology</strong></text>
+
+}
+else if (Model.MajorId == 6)
+{
+    <text><strong>Chemistry</strong></text>
+
+}
+else if (Model.MajorId == 7)
+{
+    <text><strong>Physics</strong></text>
+
+}
+else if (Model.MajorId == 8)
+{
+    <text><strong>Mathematics</strong></text>
+
+}
+else if (Model.MajorId == 9)
+{
+    <text><strong>Civil Engineering</strong></text>
+
+}
+else if (Model.MajorId == 10)
+{
+    <text><strong>Mechanical Engineering</strong></text>
+
+}
+else if (Model.MajorId == 11)
+{
+    <text><strong>Electrical Engineering</strong></text>
+
+}
+else if (Model.MajorId == 12)
+{
+    <text><strong>Computer Engineering</strong></text>
+
+}
+else if (Model.MajorId == 13)
+{
+    <text><strong>Software Engineering</strong></text>
+
+}
+else if (Model.MajorId == 14)
+{
+    <text><strong>Data Science</strong></text>
+
+}
+else if (Model.MajorId == 15)
+{
+    <text><strong>Cybersecurity</strong></text>
+
+}
+else if (Model.MajorId == 16)
+{
+    <text><strong>Artificial Intelligence</strong></text>
+
+}
+else if (Model.MajorId == 17)
+{
+    <text><strong>Journalism</strong></text>
+
+}
+else if (Model.MajorId == 18)
+{
+    <text><strong>Public Relations</strong></text>
+
+}
+else if (Model.MajorId == 19)
+{
+    <text><strong>Advertising</strong></text>
+
+}
+else if (Model.MajorId == 20)
+{
+    <text><strong>Digital Media</strong></text>
+
+}
+else
+{
+    <text><strong></strong></text>
+}
+
+<br /><br /><br /><br />
+
+<h6>To edit any information on this page, please contact the relevant administrator.</h6>
