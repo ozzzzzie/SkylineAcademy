@@ -10,27 +10,28 @@
     <h4>Enrollement</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EnrollementDate)
+        <dt class="col-sm-2">
+            Student ID
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EnrollementDate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Student.StudentId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Schedule)
+            Schedule ID
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Schedule.ScheduleId)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Student)
+
+        <dt class="col-sm-2">
+            Enrollement Date
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Student.StudentId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EnrollementDate)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.EnrollementId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.EnrollementId"><button type="button" class="btn btn-dark">Edit</button></a>
+    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
 </div>

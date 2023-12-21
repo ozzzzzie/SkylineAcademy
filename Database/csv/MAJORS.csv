@@ -1,0 +1,21 @@
+MNAME,MDESCRIPTION,FACULTY_ID
+English Literature,"Focuses on the study of English literature, including literary analysis, critical thinking, and interpretation of various literary works.",1
+Fine Arts,"Explores various forms of visual arts, including painting, sculpture, photography, and digital art, emphasizing creativity and artistic expression.",1
+History,"Examines past events, civilizations, and societies, analyzing historical sources, conducting research, and interpreting historical contexts and narratives.",1
+Music Performance,"Focuses on instrumental or vocal performance, music theory, and ensemble participation, developing musical skills and artistic expression.",1
+Biology,"Studies living organisms, their structures, functions, and interactions, exploring areas such as cell biology, genetics, ecology, and evolution.",2
+Chemistry,"Focuses on the composition, properties, and reactions of substances, including organic and inorganic chemistry, analytical chemistry, and physical chemistry.",2
+Physics,"Examines the fundamental principles of matter, energy, and their interactions, covering areas such as mechanics, electromagnetism, thermodynamics, and quantum physics.",2
+Mathematics,"Explores mathematical concepts, theories, and applications, including calculus, algebra, geometry, statistics, and mathematical modeling.",2
+Civil Engineering,"Focuses on the design, construction, and maintenance of infrastructure such as bridges, roads, buildings, and water supply systems.",3
+Mechanical Engineering,"Covers the design and development of mechanical systems and devices, including engines, machines, thermal systems, and robotics.",3
+Electrical Engineering,"Focuses on the study of electrical systems, electronics, power generation, transmission, and utilization, including circuits, controls, and telecommunications.",3
+Computer Engineering,"Combines computer science and electrical engineering to design and develop computer hardware and software systems, including computer architecture, embedded systems, and digital systems design.",3
+Software Engineering,"Covers software development methodologies, programming languages, software testing, and software project management.",4
+Data Science,"Focuses on extracting insights and knowledge from large datasets, including data analysis, machine learning, and statistical modeling.",4
+Cybersecurity,"Focuses on protecting computer systems and networks from unauthorized access, data breaches, and cyber threats, including network security and cryptography.",4
+Artificial Intelligence,"Explores the design and development of intelligent computer systems, including machine learning, natural language processing, and computer vision.",4
+Journalism,"Covers news reporting, writing, investigative journalism, media ethics, and multimedia storytelling in various media platforms.",5
+Public Relations,Focuses on managing and maintaining relationships between organizations and their audiences through strategic communication and media relations.,5
+Advertising,"Explores the principles and practices of creating persuasive messages and campaigns, including market research, creative strategy, and media planning.",5
+Digital Media,"Covers the production, management, and analysis of digital media content, including web design, social media, interactive media, and content marketing.",5

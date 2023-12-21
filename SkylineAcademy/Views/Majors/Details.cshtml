@@ -32,6 +32,17 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.MajorId"><button type="button" class="btn btn-dark">Edit</button></a> 
-    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+    @if (User.IsInRole("Admin")) {
+        <a asp-action="Edit" asp-route-id="@Model?.MajorId"><button type="button" class="btn btn-dark">Edit</button></a>
+        <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+
+    } else if (User.IsInRole("Super Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.MajorId"><button type="button" class="btn btn-dark">Edit</button></a>
+        <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+    } else
+    {
+        <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+
+    }
 </div>

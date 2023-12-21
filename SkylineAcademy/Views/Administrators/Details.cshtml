@@ -18,18 +18,36 @@
         <dt class = "col-sm-2">
             Last Name
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Alname)
-        </dd>
-        <dt class = "col-sm-2">
-            Address
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Aaddress)
-        </dd>
-        <dt class = "col-sm-2">
-            Phone Number
-        </dt>
+        @if (User.IsInRole("Admin"))
+        {
+            <dt class="col-sm-2">
+                Address
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Aaddress)
+            </dd>
+            <dt class="col-sm-2">
+                Phone Number
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Aphonenumber)
+            </dd>
+        }
+        else if (User.IsInRole("SuperAdmin"))
+        {
+            <dt class="col-sm-2">
+                Address
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Aaddress)
+            </dd>
+            <dt class="col-sm-2">
+                Phone Number
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Aphonenumber)
+            </dd>
+        }
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Aphonenumber)
         </dd>
@@ -48,7 +66,19 @@
     </dl>
 </div>
 <br />
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.AdministratorId"><button type="button" class="btn btn-dark">Edit</button></a> 
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Edit" asp-route-id="@Model?.AdministratorId"><button type="button" class="btn btn-dark">Edit</button></a>
     <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
-</div>
+
+}
+else if (User.IsInRole("Super Admin"))
+{
+    <a asp-action="Edit" asp-route-id="@Model?.AdministratorId"><button type="button" class="btn btn-dark">Edit</button></a>
+    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+}
+else
+{
+    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+
+}

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
 }
-
+<br />
 <h1>Edit</h1>
 
 <h4>Enrollement</h4>
@@ -14,24 +14,21 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="EnrollementId" />
             <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
+                <label asp-for="StudentId" class="control-label">Student ID</label>
                 <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
                 <span asp-validation-for="StudentId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
-                <label asp-for="ScheduleId" class="control-label"></label>
+                <label asp-for="ScheduleId" class="control-label">Schedule ID</label>
                 <select asp-for="ScheduleId" class="form-control" asp-items="ViewBag.ScheduleId"></select>
                 <span asp-validation-for="ScheduleId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <input type="submit" value="Save" class="btn btn-dark" />
+                <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+            </div><br />
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
