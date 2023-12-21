@@ -140,7 +140,7 @@ namespace SkylineAcademy.Controllers
 
                             if (chk == 0)
                             {
-                                ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
+                                ModelState.AddModelError("ScheduleId", "Student has not completed the necessary course prerequisite.");
                             }
                         }
                     }
@@ -185,6 +185,42 @@ namespace SkylineAcademy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
         {
+            var stuEnr = await _context.ClassSchedules.FirstOrDefaultAsync(e => e.ScheduleId == enrollement.ScheduleId);
+            var student = await _context.Students.FindAsync(enrollement.StudentId);
+
+            if (stuEnr != null && student != null)
+            {
+                var course = await _context.Courses.FindAsync(Convert.ToInt32(stuEnr.CourseId));
+
+                if (course.MajorId != student.MajorId)
+                {
+                    ModelState.AddModelError("ScheduleId", "Students cannot join courses that are not within their majors.");
+                }
+                else
+                {
+                    // Check if the student is already enrolled in a schedule with the same SlotId
+                    var isEnrolled = await _context.Enrollements.AnyAsync(x => x.StudentId == enrollement.StudentId && x.Schedule.SlotId == stuEnr.SlotId);
+
+                    if (isEnrolled)
+                    {
+                        ModelState.AddModelError("ScheduleId", "Student is already enrolled in a schedule at the same time.");
+                    }
+                    else
+                    {
+                        List<Prerequisite> crses = await _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToListAsync();
+
+                        foreach (Prerequisite i in crses)
+                        {
+                            var chk = await _context.Enrollements.Where(x => x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).CountAsync();
+
+                            if (chk == 0)
+                            {
+                                ModelState.AddModelError("ScheduleId", "Student has not completed the necessary course prerequisite.");
+                            }
+                        }
+                    }
+                }
+            }
             if (id != enrollement.EnrollementId)
             {
                 return NotFound();

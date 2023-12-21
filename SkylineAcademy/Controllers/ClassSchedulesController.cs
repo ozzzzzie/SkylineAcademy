@@ -49,6 +49,19 @@ namespace SkylineAcademy.Controllers
         // GET: ClassSchedules/Create
         public IActionResult Create()
         {
+            // Retrieve the list of courses from data source
+            var courses = _context.Courses.ToList();
+            // Retrieve the list of teachers from data source
+            var teachers = _context.Teachers.ToList();
+
+            // Retrieve the list of classrooms from data source
+            var classrooms = _context.Classrooms.ToList();
+
+            // Pass the lists to the view using the ViewBag
+            ViewBag.Teachers = new SelectList(teachers, "TeacherId", "TeacherId");
+            ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
+            ViewBag.Courses = new SelectList(courses, "CourseId", "CourseId");
+
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId");
             return View();
         }
@@ -58,76 +71,61 @@ namespace SkylineAcademy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
-        //{
-        //    var conflictingSchedule = await _context.ClassSchedules
-        //        .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
-        //                                   cs.SlotId == classSchedule.SlotId &&
-        //                                   cs.Academicyear == classSchedule.Academicyear &&
-        //                                   cs.Semester == classSchedule.Semester);
-
-        //    if (conflictingSchedule != null)
-        //    {
-        //        var errorMessage = "Teacher is already scheduled for a class at this time";
-
-        //        if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
-        //            errorMessage += " in the same academic year";
-
-        //        if (conflictingSchedule.Semester == classSchedule.Semester)
-        //            errorMessage += " in the same semester";
-
-        //        ModelState.AddModelError("TeacherId", errorMessage);
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(classSchedule);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-
-        //    ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
-        //    return View(classSchedule);
-        //}
-
         public async Task<IActionResult> Create([Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
         {
-            var conflictingSchedule = await _context.ClassSchedules
-                .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
-                                           cs.SlotId == classSchedule.SlotId &&
-                                           cs.Academicyear == classSchedule.Academicyear &&
-                                           cs.Semester == classSchedule.Semester);
+            // Check if the teacher is teaching a course from their faculty
+            var teacher = await _context.Teachers
+                .Include(t => t.Faculty)
+                .FirstOrDefaultAsync(t => t.TeacherId == Convert.ToInt32(classSchedule.TeacherId));
 
-            var conflictingClassroomSchedule = await _context.ClassSchedules
-                .FirstOrDefaultAsync(cs => cs.ClassroomId == classSchedule.ClassroomId &&
-                                           cs.SlotId == classSchedule.SlotId &&
-                                           cs.Academicyear == classSchedule.Academicyear &&
-                                           cs.Semester == classSchedule.Semester);
+            var courseId = classSchedule.CourseId;
+            var course = await _context.Courses
+                .Include(c => c.Major)
+                .FirstOrDefaultAsync(c => c.CourseId == Convert.ToInt32(courseId));
 
-            if (conflictingSchedule != null)
+            if (teacher != null && course != null && teacher.FacultyId != course.Major.FacultyId)
             {
-                var errorMessage = "Teacher is already scheduled for a class at this time";
-
-                if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
-                    errorMessage += " in the same academic year";
-
-                if (conflictingSchedule.Semester == classSchedule.Semester)
-                    errorMessage += " in the same semester";
-
-                ModelState.AddModelError("TeacherId", errorMessage);
+                ModelState.AddModelError("TeacherId", "Teacher can only teach courses from their faculty");
             }
-
-            if (conflictingClassroomSchedule != null)
+            else
             {
-                var errorMessage = "Classroom is already scheduled for a class at this time";
+                var conflictingSchedule = await _context.ClassSchedules
+                    .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
+                                               cs.SlotId == classSchedule.SlotId &&
+                                               cs.Academicyear == classSchedule.Academicyear &&
+                                               cs.Semester == classSchedule.Semester);
 
-                if (conflictingClassroomSchedule.Academicyear == classSchedule.Academicyear)
-                    errorMessage += " in the same academic year";
+                var conflictingClassroomSchedule = await _context.ClassSchedules
+                    .FirstOrDefaultAsync(cs => cs.ClassroomId == classSchedule.ClassroomId &&
+                                               cs.SlotId == classSchedule.SlotId &&
+                                               cs.Academicyear == classSchedule.Academicyear &&
+                                               cs.Semester == classSchedule.Semester);
 
-                if (conflictingClassroomSchedule.Semester == classSchedule.Semester)
-                    errorMessage += " in the same semester";
+                if (conflictingSchedule != null)
+                {
+                    var errorMessage = "Teacher is already scheduled for a class at this time";
 
-                ModelState.AddModelError("ClassroomId", errorMessage);
+                    if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
+                        errorMessage += " in the same academic year";
+
+                    if (conflictingSchedule.Semester == classSchedule.Semester)
+                        errorMessage += " in the same semester";
+
+                    ModelState.AddModelError("TeacherId", errorMessage);
+                }
+
+                if (conflictingClassroomSchedule != null)
+                {
+                    var errorMessage = "Classroom is already scheduled for a class at this time";
+
+                    if (conflictingClassroomSchedule.Academicyear == classSchedule.Academicyear)
+                        errorMessage += " in the same academic year";
+
+                    if (conflictingClassroomSchedule.Semester == classSchedule.Semester)
+                        errorMessage += " in the same semester";
+
+                    ModelState.AddModelError("ClassroomId", errorMessage);
+                }
             }
 
             if (ModelState.IsValid)
@@ -140,6 +138,7 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
+
         [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -154,6 +153,18 @@ namespace SkylineAcademy.Controllers
             {
                 return NotFound();
             }
+            // Retrieve the list of courses from data source
+            var courses = _context.Courses.ToList();
+            // Retrieve the list of teachers from data source
+            var teachers = _context.Teachers.ToList();
+
+            // Retrieve the list of classrooms from data source
+            var classrooms = _context.Classrooms.ToList();
+
+            // Pass the lists to the view using the ViewBag
+            ViewBag.Teachers = new SelectList(teachers, "TeacherId", "TeacherId");
+            ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
+            ViewBag.Courses = new SelectList(courses, "CourseId", "CourseId");
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
@@ -165,6 +176,61 @@ namespace SkylineAcademy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
         {
+            // Check if the teacher is teaching a course from their faculty
+            var teacher = await _context.Teachers
+                .Include(t => t.Faculty)
+                .FirstOrDefaultAsync(t => t.TeacherId == Convert.ToInt32(classSchedule.TeacherId));
+
+            var courseId = classSchedule.CourseId;
+            var course = await _context.Courses
+                .Include(c => c.Major)
+                .FirstOrDefaultAsync(c => c.CourseId == Convert.ToInt32(courseId));
+
+            if (teacher != null && course != null && teacher.FacultyId != course.Major.FacultyId)
+            {
+                ModelState.AddModelError("TeacherId", "Teachers can only teach courses from their respective faculty.");
+            }
+            else
+            {
+                var conflictingSchedule = await _context.ClassSchedules
+                    .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
+                                               cs.SlotId == classSchedule.SlotId &&
+                                               cs.Academicyear == classSchedule.Academicyear &&
+                                               cs.Semester == classSchedule.Semester);
+
+                var conflictingClassroomSchedule = await _context.ClassSchedules
+                    .FirstOrDefaultAsync(cs => cs.ClassroomId == classSchedule.ClassroomId &&
+                                               cs.SlotId == classSchedule.SlotId &&
+                                               cs.Academicyear == classSchedule.Academicyear &&
+                                               cs.Semester == classSchedule.Semester);
+
+                if (conflictingSchedule != null)
+                {
+                    var errorMessage = "Teacher is already scheduled for a class during this time";
+
+                    if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
+                        errorMessage += " in the same academic year";
+
+                    if (conflictingSchedule.Semester == classSchedule.Semester)
+                        errorMessage += " in the same semester";
+
+                    ModelState.AddModelError("TeacherId", errorMessage);
+                }
+
+                if (conflictingClassroomSchedule != null)
+                {
+                    var errorMessage = "Classroom is already scheduled for a class during this time";
+
+                    if (conflictingClassroomSchedule.Academicyear == classSchedule.Academicyear)
+                        errorMessage += " in the same academic year";
+
+                    if (conflictingClassroomSchedule.Semester == classSchedule.Semester)
+                        errorMessage += " in the same semester";
+
+                    ModelState.AddModelError("ClassroomId", errorMessage);
+                }
+            }
+
             if (id != classSchedule.ScheduleId)
             {
                 return NotFound();
