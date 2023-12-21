@@ -58,14 +58,85 @@ namespace SkylineAcademy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
+        //{
+        //    var conflictingSchedule = await _context.ClassSchedules
+        //        .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
+        //                                   cs.SlotId == classSchedule.SlotId &&
+        //                                   cs.Academicyear == classSchedule.Academicyear &&
+        //                                   cs.Semester == classSchedule.Semester);
+
+        //    if (conflictingSchedule != null)
+        //    {
+        //        var errorMessage = "Teacher is already scheduled for a class at this time";
+
+        //        if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
+        //            errorMessage += " in the same academic year";
+
+        //        if (conflictingSchedule.Semester == classSchedule.Semester)
+        //            errorMessage += " in the same semester";
+
+        //        ModelState.AddModelError("TeacherId", errorMessage);
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(classSchedule);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
+        //    return View(classSchedule);
+        //}
+
         public async Task<IActionResult> Create([Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
         {
+            var conflictingSchedule = await _context.ClassSchedules
+                .FirstOrDefaultAsync(cs => cs.TeacherId == classSchedule.TeacherId &&
+                                           cs.SlotId == classSchedule.SlotId &&
+                                           cs.Academicyear == classSchedule.Academicyear &&
+                                           cs.Semester == classSchedule.Semester);
+
+            var conflictingClassroomSchedule = await _context.ClassSchedules
+                .FirstOrDefaultAsync(cs => cs.ClassroomId == classSchedule.ClassroomId &&
+                                           cs.SlotId == classSchedule.SlotId &&
+                                           cs.Academicyear == classSchedule.Academicyear &&
+                                           cs.Semester == classSchedule.Semester);
+
+            if (conflictingSchedule != null)
+            {
+                var errorMessage = "Teacher is already scheduled for a class at this time";
+
+                if (conflictingSchedule.Academicyear == classSchedule.Academicyear)
+                    errorMessage += " in the same academic year";
+
+                if (conflictingSchedule.Semester == classSchedule.Semester)
+                    errorMessage += " in the same semester";
+
+                ModelState.AddModelError("TeacherId", errorMessage);
+            }
+
+            if (conflictingClassroomSchedule != null)
+            {
+                var errorMessage = "Classroom is already scheduled for a class at this time";
+
+                if (conflictingClassroomSchedule.Academicyear == classSchedule.Academicyear)
+                    errorMessage += " in the same academic year";
+
+                if (conflictingClassroomSchedule.Semester == classSchedule.Semester)
+                    errorMessage += " in the same semester";
+
+                ModelState.AddModelError("ClassroomId", errorMessage);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(classSchedule);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }

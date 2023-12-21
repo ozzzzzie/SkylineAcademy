@@ -55,6 +55,8 @@ Html
  .Grid(Model)
  .Build(columns =>
  {
+
+     columns.Add(model => model.CourseId).Titled("Course ID");
      columns.Add(model => model.Cname).Titled("Name");
      columns.Add(model => model.Major.Mname).Titled("Major");
      columns.Add(model => model.Credits).Titled("Credits");

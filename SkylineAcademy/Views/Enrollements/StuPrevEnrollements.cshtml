@@ -1,0 +1,36 @@
+﻿@model List<SkylineAcademy.Models.Enrollement>
+@using NonFactors.Mvc.Grid
+<br />
+<a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+<br />
+<br />
+<h1 align="center">Enrollment History</h1>
+<br />
+<br />
+<br />
+<div class="table grid-container">
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add(model => model.EnrollementId).Titled("Enrollment ID");
+            columns.Add(model => model.Schedule.CourseId).Titled("Course ID");
+            columns.Add(model => model.Schedule.TeacherId).Titled("Teacher ID");
+            columns.Add(model => model.Schedule.Semester).Titled("Semester");
+            columns.Add(model => model.Schedule.Academicyear).Titled("Academic Year");
+        })
+        .Empty("No data found")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.RowsPerPage = 24;
+        })
+        )
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+}

@@ -26,6 +26,28 @@ namespace SkylineAcademy.Controllers
             var myDbContext = _context.Enrollements.Include(e => e.Schedule).Include(e => e.Student);
             return View(await myDbContext.ToListAsync());
         }
+        public ActionResult StuPrevEnrollements()
+        {
+            Student stu = _context.Students.Where(x => x.Semail == User.Identity.Name).FirstOrDefault();
+            List<Enrollement> stuprevenr = _context.Enrollements.Where(x => x.StudentId == stu.StudentId).ToList();
+
+            foreach (Enrollement enrollement in stuprevenr)
+            {
+                List<ClassSchedule> sched = _context.ClassSchedules.Where(x => x.ScheduleId == enrollement.ScheduleId).ToList();
+
+                foreach (ClassSchedule i in sched)
+                {
+                    if (int.TryParse(i.TeacherId, out int teacherId))
+                    {
+                        List<Teacher> teacher = _context.Teachers.Where(x => x.TeacherId == teacherId).ToList();
+
+                    }
+                }
+            }
+
+            return View(stuprevenr);
+        }
+
         [Authorize]
         // GET: Enrollements/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -60,31 +82,83 @@ namespace SkylineAcademy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
+        //{
+        //      var stuEnr = _context.ClassSchedules.Where(e => e.ScheduleId == enrollement.ScheduleId).FirstOrDefault();
+
+        //        List<Prerequisite> crses = _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToList();
+
+        //        foreach (Prerequisite i in crses)
+        //        {
+        //            var chk  = _context.Enrollements.Where(x=> x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).Count();
+
+        //            if (chk == 0)
+        //            {
+        //                ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
+        //            }
+        //        } 
+        //    if (ModelState.IsValid)
+        //    {
+        //         _context.Add(enrollement);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["ScheduleId"] = new SelectList(_context.ClassSchedules, "ScheduleId", "ScheduleId", enrollement.ScheduleId);
+        //    ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", enrollement.StudentId);
+        //    return View(enrollement);
+        //}
+
         public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
         {
-              var stuEnr = _context.ClassSchedules.Where(e => e.ScheduleId == enrollement.ScheduleId).FirstOrDefault();
+            var stuEnr = await _context.ClassSchedules.FirstOrDefaultAsync(e => e.ScheduleId == enrollement.ScheduleId);
+            var student = await _context.Students.FindAsync(enrollement.StudentId);
 
-                List<Prerequisite> crses = _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToList();
+            if (stuEnr != null && student != null)
+            {
+                var course = await _context.Courses.FindAsync(Convert.ToInt32(stuEnr.CourseId));
 
-                foreach (Prerequisite i in crses)
+                if (course.MajorId != student.MajorId)
                 {
-                    var chk  = _context.Enrollements.Where(x=> x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).Count();
+                    ModelState.AddModelError("ScheduleId", "Students cannot join courses that are not within their majors.");
+                }
+                else
+                {
+                    // Check if the student is already enrolled in a schedule with the same SlotId
+                    var isEnrolled = await _context.Enrollements.AnyAsync(x => x.StudentId == enrollement.StudentId && x.Schedule.SlotId == stuEnr.SlotId);
 
-                    if (chk == 0)
+                    if (isEnrolled)
                     {
-                        ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
+                        ModelState.AddModelError("ScheduleId", "Student is already enrolled in a schedule at the same time.");
                     }
-                } 
+                    else
+                    {
+                        List<Prerequisite> crses = await _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToListAsync();
+
+                        foreach (Prerequisite i in crses)
+                        {
+                            var chk = await _context.Enrollements.Where(x => x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).CountAsync();
+
+                            if (chk == 0)
+                            {
+                                ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
+                            }
+                        }
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                 _context.Add(enrollement);
+                _context.Add(enrollement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ScheduleId"] = new SelectList(_context.ClassSchedules, "ScheduleId", "ScheduleId", enrollement.ScheduleId);
             ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", enrollement.StudentId);
             return View(enrollement);
         }
+
         [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Enrollements/Edit/5
         public async Task<IActionResult> Edit(int? id)
