@@ -1,4 +1,4 @@
-﻿@model SkylineAcademy.Models.Grade
+﻿@*@model SkylineAcademy.Models.Grade
 
 @{
     ViewData["Title"] = "Create";
@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
-                <input asp-for="EnrollementId" class="form-control" />
+                <select asp-for="EnrollementId" class="form-control" asp-items="ViewBag.Enrollements"></select>
                 <span asp-validation-for="EnrollementId" class="text-danger"></span>
             </div><br />
             <div class="form-group">
@@ -33,6 +33,11 @@
                 <span asp-validation-for="Total" class="text-danger"></span>
             </div><br />
             <div class="form-group">
+                <label asp-for="Passedcourse" class="control-label"></label>
+                <input asp-for="Passedcourse" class="form-control" />
+                <span asp-validation-for="Passedcourse" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
             </div><br />
@@ -42,4 +47,93 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+*@
+
+@model SkylineAcademy.Models.Grade
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br />
+<h1>Create</h1>
+
+<h4>Grade</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
+                <select asp-for="EnrollementId" class="form-control" asp-items="ViewBag.Enrollements"></select>
+                <span asp-validation-for="EnrollementId" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <label asp-for="Midterm" class="control-label">Midterm</label>
+                <select asp-for="Midterm" class="form-control" onchange="calculateTotal()">
+                    @for (int i = 0; i <= 100; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <span asp-validation-for="Midterm" class="text-danger"></span>
+            </div><br />
+
+            <div class="form-group">
+                <label asp-for="Final" class="control-label">Final</label>
+                <select asp-for="Final" class="form-control" onchange="calculateTotal()">
+                    @for (int i = 0; i <= 100; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                <span asp-validation-for="Final" class="text-danger"></span>
+            </div><br />
+
+            <div class="form-group">
+                <label asp-for="Total" class="control-label">Total</label>
+                <input asp-for="Total" class="form-control" readonly id="totalField" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div><br />
+
+            <script>
+                function calculateTotal() {
+                    var midterm = parseInt($('#Midterm').val()) || 0;
+                    var final = parseInt($('#Final').val()) || 0;
+                    var average = Math.ceil((midterm + final) / 2);
+                    $('#totalField').val(average);
+                }
+            </script>
+            <div class="form-group">
+                <label asp-for="Passedcourse" class="control-label">Passed Course</label>
+                <select asp-for="Passedcourse" class="form-control">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <span asp-validation-for="Passedcourse" class="text-danger"></span>
+            </div><br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+                }
+                else if (User.IsInRole("Super Admin"))
+                {
+                    <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+                }
+                else if (User.IsInRole("Teacher"))
+                {
+                    <a asp-action="TeacherStudentsGrades"><button type="button" class="btn btn-light">Back to List</button></a>
+                }
+            </div><br />
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

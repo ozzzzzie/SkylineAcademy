@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -278,8 +279,7 @@ namespace SkylineAcademy.Models
                 entity.Property(e => e.GradeId).HasColumnName("GRADE_ID");
 
                 entity.Property(e => e.EnrollementId)
-                    .HasMaxLength(64)
-                    .IsUnicode(false)
+                    .IsUnicode(true)
                     .HasColumnName("ENROLLEMENT_ID");
 
                 entity.Property(e => e.Final).HasColumnName("FINAL");
@@ -287,6 +287,8 @@ namespace SkylineAcademy.Models
                 entity.Property(e => e.Midterm).HasColumnName("MIDTERM");
 
                 entity.Property(e => e.Total).HasColumnName("TOTAL");
+
+                entity.Property(e => e.Passedcourse).HasColumnName("PASSEDCOURSE");
             });
 
             modelBuilder.Entity<Job>(entity =>

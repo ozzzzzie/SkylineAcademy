@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ScaffoldingReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
@@ -23,6 +27,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Templating" Version="6.0.16" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGenerators.Mvc" Version="6.0.16" />
     <PackageReference Include="NonFactors.Grid.Mvc6" Version="7.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\MyDb\" />
   </ItemGroup>
 
 </Project>

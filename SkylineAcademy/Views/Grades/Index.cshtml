@@ -44,6 +44,12 @@ else if (User.IsInRole("SuperAdmin"))
         <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
     </p>
 }
+else if (User.IsInRole("Teacher"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
 else
 {
     <br />
@@ -61,15 +67,26 @@ else
 </style>
 
 <div class="table grid-container">
-@(
-Html
- .Grid(Model)
- .Build(columns =>
- {
+    @(
+        Html
+     .Grid(Model)
+     .Build(columns =>
+     {
          columns.Add(model => model.EnrollementId).Titled("Enrollement ID");
          columns.Add(model => model.Midterm).Titled("Midterm");
          columns.Add(model => model.Final).Titled("Final");
          columns.Add(model => model.Total).Titled("Total");
+         columns.Add(model => model.Passedcourse).Titled("Pass/Fail").RenderedAs(model =>
+    {
+                if (model.Passedcourse == true)
+                {
+                    return "Passed";
+                }
+                else
+                {
+                    return "Failed";
+                }
+            });
 
             if (User.IsInRole("Admin"))
             {
@@ -110,6 +127,11 @@ Html
                 })).Filterable(false);
 
                 columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
+                {
+                    id =
+                model.GradeId
+                })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
                 {
                     id =
                 model.GradeId

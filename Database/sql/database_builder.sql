@@ -323,11 +323,15 @@ GO
 
 CREATE TABLE GRADES (
                 GRADE_ID INT IDENTITY (1,1) UNIQUE NOT NULL,
-                ENROLLEMENT_ID VARCHAR(64) NOT NULL,
-                MIDTERM INT NOT NULL,
-                FINAL INT NOT NULL,
-                TOTAL INT NOT NULL,
-                PRIMARY KEY CLUSTERED (GRADE_ID)
+                ENROLLEMENT_ID INT NOT NULL,
+                MIDTERM INT,
+                FINAL INT,
+                TOTAL INT,
+                PASSEDCOURSE BIT,
+                PRIMARY KEY CLUSTERED (GRADE_ID),
+                                FOREIGN KEY (ENROLLEMENT_ID) REFERENCES ENROLLEMENTS (ENROLLEMENT_ID)
+                                ON DELETE NO ACTION
+                                ON UPDATE NO ACTION
 );
 
 INSERT INTO SLOTS(WEEKDAY_NAME,START_TIME,END_TIME) VALUES ('Sunday','8:00','10:00');

@@ -48,6 +48,28 @@ namespace SkylineAcademy.Controllers
             return View(stuprevenr);
         }
 
+        public ActionResult TeachPrevEnrollements()
+        {
+            Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+
+            List<ClassSchedule> sched = _context.ClassSchedules
+                .Where(x => Convert.ToInt32(x.TeacherId) == techr.TeacherId)
+                .ToList();
+
+            List<Enrollement> teachprevenr = new List<Enrollement>();
+
+            foreach (ClassSchedule schedule in sched)
+            {
+                List<Enrollement> enrollements = _context.Enrollements
+                    .Where(x => x.ScheduleId == schedule.ScheduleId)
+                    .ToList();
+
+                teachprevenr.AddRange(enrollements);
+            }
+
+            return View(teachprevenr);
+        }
+
         [Authorize]
         // GET: Enrollements/Details/5
         public async Task<IActionResult> Details(int? id)

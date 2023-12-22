@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,15 +17,15 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Grades
         public async Task<IActionResult> Index()
         {
-              return _context.Grades != null ? 
-                          View(await _context.Grades.ToListAsync()) :
-                          Problem("Entity set 'MyDbContext.Grades'  is null.");
+            return _context.Grades != null ?
+                        View(await _context.Grades.ToListAsync()) :
+                        Problem("Entity set 'MyDbContext.Grades'  is null.");
         }
-        [Authorize]
+
         // GET: Grades/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,19 +43,109 @@ namespace SkylineAcademy.Controllers
 
             return View(grade);
         }
-        [Authorize(Roles ="SuperAdmin,Admin,Teacher")]
+
         // GET: Grades/Create
         public IActionResult Create()
         {
+            var enrollements = _context.Enrollements.ToList();
+
+            ViewBag.Enrollements = new SelectList(enrollements, "EnrollementId", "EnrollementId");
+
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
+
+        //public ActionResult TeacherStudentsGrades()
+        //{
+        //    Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+
+        //    List<ClassSchedule> sched = _context.ClassSchedules
+        //        .Where(x => x.TeacherId == techr.TeacherId.ToString())
+        //        .ToList();
+
+        //    List<Grade> studentsGrades = new List<Grade>();
+
+        //    foreach (ClassSchedule schedule in sched)
+        //    {
+        //        List<Enrollement> enrollements = _context.Enrollements
+        //            .Where(x => x.ScheduleId == schedule.ScheduleId)
+        //            .ToList();
+
+        //        foreach (Enrollement enrollement in enrollements)
+        //        {
+        //            Grade grade = _context.Grades.FirstOrDefault(x => x.EnrollementId == enrollement.EnrollementId);
+        //            if (grade != null)
+        //            {
+        //                studentsGrades.Add(grade);
+        //            }
+        //        }
+        //    }
+
+        //    return View(studentsGrades);
+        //}
+
+        public ActionResult TeacherStudentsGrades()
+        {
+            Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+
+            var results = from Enrollement in _context.Enrollements
+                          join Grade in _context.Grades on Enrollement.EnrollementId equals Grade.EnrollementId
+                          join Student in _context.Students on Enrollement.StudentId equals Student.StudentId
+                          join Course in _context.Courses on Convert.ToInt32(Enrollement.Schedule.CourseId) equals Course.CourseId
+                          where Convert.ToInt32(Enrollement.Schedule.TeacherId) == techr.TeacherId
+
+                          select new
+                          {
+                              GradeId = Grade.GradeId,
+                              StudentId = Enrollement.StudentId,
+                              CourseId = Enrollement.Schedule.CourseId,
+                              CourseName = Course.Cname,
+                              TeacherId = Enrollement.Schedule.TeacherId,
+                              Midterm = Grade.Midterm,
+                              Final = Grade.Final,
+                              Total = Grade.Total,
+                              Passedcourse = Grade.Passedcourse,
+                              StudentFirstName = Student.Sfname,
+                              StudentLastName = Student.Slname
+                          };
+
+            return View(results.ToList());
+        }
+
+        public ActionResult StudentsGrades()
+        {
+            Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
+
+            var results = from Enrollement in _context.Enrollements
+                          join Grade in _context.Grades on Enrollement.EnrollementId equals Grade.EnrollementId
+                          join Student in _context.Students on Enrollement.StudentId equals Student.StudentId
+                          join Course in _context.Courses on Convert.ToInt32(Enrollement.Schedule.CourseId) equals Course.CourseId
+                          where Convert.ToInt32(Enrollement.StudentId) == stu.StudentId
+
+                          select new
+                          {
+                              GradeId = Grade.GradeId,
+                              StudentId = Enrollement.StudentId,
+                              CourseId = Enrollement.Schedule.CourseId,
+                              CourseName = Course.Cname,
+                              TeacherId = Enrollement.Schedule.TeacherId,
+                              Midterm = Grade.Midterm,
+                              Final = Grade.Final,
+                              Total = Grade.Total,
+                              Passedcourse = Grade.Passedcourse,
+                              StudentFirstName = Student.Sfname,
+                              StudentLastName = Student.Slname
+                          };
+
+            return View(results.ToList());
+        }
+
+
         // POST: Grades/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GradeId,EnrollementId,Midterm,Final,Total")] Grade grade)
+        public async Task<IActionResult> Create([Bind("GradeId,EnrollementId,Midterm,Final,Total,Passedcourse")] Grade grade)
         {
             if (ModelState.IsValid)
             {
@@ -66,10 +155,15 @@ namespace SkylineAcademy.Controllers
             }
             return View(grade);
         }
-        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
+
         // GET: Grades/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var enrollements = _context.Enrollements.ToList();
+
+            ViewBag.Enrollements = new SelectList(enrollements, "EnrollementId", "EnrollementId");
+
+
             if (id == null || _context.Grades == null)
             {
                 return NotFound();
@@ -82,13 +176,13 @@ namespace SkylineAcademy.Controllers
             }
             return View(grade);
         }
-        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
+
         // POST: Grades/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GradeId,EnrollementId,Midterm,Final,Total")] Grade grade)
+        public async Task<IActionResult> Edit(int id, [Bind("GradeId,EnrollementId,Midterm,Final,Total,Passedcourse")] Grade grade)
         {
             if (id != grade.GradeId)
             {
@@ -117,7 +211,7 @@ namespace SkylineAcademy.Controllers
             }
             return View(grade);
         }
-        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
+
         // GET: Grades/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -135,7 +229,7 @@ namespace SkylineAcademy.Controllers
 
             return View(grade);
         }
-        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
+
         // POST: Grades/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -150,14 +244,14 @@ namespace SkylineAcademy.Controllers
             {
                 _context.Grades.Remove(grade);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GradeExists(int id)
         {
-          return (_context.Grades?.Any(e => e.GradeId == id)).GetValueOrDefault();
+            return (_context.Grades?.Any(e => e.GradeId == id)).GetValueOrDefault();
         }
     }
 }

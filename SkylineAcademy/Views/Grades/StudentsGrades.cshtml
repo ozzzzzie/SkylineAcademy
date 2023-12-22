@@ -1,0 +1,100 @@
+﻿@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Grades";
+}
+
+<br />
+
+<p>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><button type="button" class="btn btn-outline-primary">Home</button></a>
+    }
+
+</p>
+
+<h1 align="center">Student's Grades</h1>
+<br />
+@if (User.IsInRole("Admin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else if (User.IsInRole("SuperAdmin"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else if (User.IsInRole("Teacher"))
+{
+    <p align="right">
+        <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
+    </p>
+}
+else
+{
+    <br />
+}
+
+@Html.Grid(Model).Build(columns =>
+{
+        columns.Add().Titled("Grade ID")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("GradeId").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Course ID")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("CourseId").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Course Name")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Student ID")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("StudentId").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Student Name").RenderedAs(m =>
+            {
+                string firstName = ((object)m).GetType().GetProperty("StudentFirstName").GetValue(m, null).ToString();
+                string lastName = ((object)m).GetType().GetProperty("StudentLastName").GetValue(m, null).ToString();
+                return $"{firstName} {lastName}";
+            });
+
+        columns.Add().Titled("Teacher ID")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("TeacherId").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Midterm")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("Midterm").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Final")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("Final").GetValue(m, null).ToString());
+
+        columns.Add().Titled("Total")
+        .RenderedAs(m => ((object)m).GetType().GetProperty("Total").GetValue(m, null).ToString());
+
+       
+}).Empty("No data found").Filterable().Sortable().Pageable(pager =>
+{
+    pager.RowsPerPage = 10;
+})
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+}

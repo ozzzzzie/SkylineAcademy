@@ -34,6 +34,19 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Total)
         </dd>
+        <dt class="col-sm-2">
+            Pass/Fail
+        </dt>
+        <dd class="col-sm-10">
+
+            @if (Model.Passedcourse == true)
+            {
+                <text>Passed</text>
+            } else
+            {
+                <text>Failed</text>
+            }
+          </dd>
     </dl>
 </div>
 <div>
@@ -47,6 +60,11 @@
     {
         <a asp-action="Edit" asp-route-id="@Model?.GradeId"><button type="button" class="btn btn-dark">Edit</button></a>
         <a asp-action="Index"><button type="button" class="btn btn-light">Back to List</button></a>
+    } 
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model?.GradeId"><button type="button" class="btn btn-dark">Edit</button></a>
+        <a asp-action="TeacherStudentsGrades"><button type="button" class="btn btn-light">Back to List</button></a>
     }
     else
     {
