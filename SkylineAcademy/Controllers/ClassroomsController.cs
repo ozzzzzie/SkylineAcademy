@@ -45,6 +45,39 @@ namespace SkylineAcademy.Controllers
 
             return View(classroom);
         }
+
+
+        //Get the classroom schedules
+
+        public IActionResult ClassroomTimetable(int clsroom, string academicYear, string semester)
+        {
+
+            // Query to join tables and select required data
+            var query = from enrollement in _context.Enrollements
+                        join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
+                        join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
+                        join classroom in _context.Classrooms on Convert.ToInt32(schedule.ClassroomId) equals classroom.ClassroomId
+                        where schedule.Academicyear == academicYear &&
+                              schedule.Semester == semester
+                        select new
+                        {
+                            CourseName = course.Cname,
+                            ClassroomNumber = schedule.ClassroomId,
+                            Facilities = classroom.Facilities,
+                            TeacherName = teacher.Tfname + " " + teacher.Tlname,
+                            Slot = schedule.Slot.SlotId
+                        };
+
+            var classrooms = _context.Classrooms.ToList();
+
+            ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
+
+            return View(query.ToList());
+        }
+
+
+
         [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Classrooms/Create
         public IActionResult Create()

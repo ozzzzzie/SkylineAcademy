@@ -49,6 +49,20 @@ else if (User.IsInRole("Teacher"))
         <a asp-action="Create"><button type="button" class="btn btn-outline-primary">Create New</button></a>
     </p>
 }
+else if (User.IsInRole("Student") && ViewBag.AverageTotal != 0)
+{
+    @if (ViewBag.AverageTotal != null)
+    {
+        <h3>Average Total: @ViewBag.AverageTotal</h3>
+        <h3>GPA: @GetGPA(ViewBag.AverageTotal)</h3>
+        <h3>Letter Grade: @GetLetterGrade(ViewBag.AverageTotal)</h3>
+    }
+} 
+else if (User.IsInRole("Student") && ViewBag.AverageTotal == 0)
+{
+    <text><h3>No GPA to display yet.</h3></text>
+    <br />
+}
 else
 {
     <br />
@@ -78,6 +92,13 @@ else
         columns.Add().Titled("Teacher ID")
         .RenderedAs(m => ((object)m).GetType().GetProperty("TeacherId").GetValue(m, null).ToString());
 
+        columns.Add().Titled("Teacher Name").RenderedAs(m =>
+            {
+                string firstName = ((object)m).GetType().GetProperty("TeacherFirstName").GetValue(m, null).ToString();
+                string lastName = ((object)m).GetType().GetProperty("TeacherLastName").GetValue(m, null).ToString();
+                return $"{firstName} {lastName}";
+            });
+
         columns.Add().Titled("Midterm")
         .RenderedAs(m => ((object)m).GetType().GetProperty("Midterm").GetValue(m, null).ToString());
 
@@ -87,14 +108,126 @@ else
         columns.Add().Titled("Total")
         .RenderedAs(m => ((object)m).GetType().GetProperty("Total").GetValue(m, null).ToString());
 
+        columns.Add().Titled("Pass/Fail").RenderedAs(m =>
+            {
+                bool passedCourse = (bool)((object)m).GetType().GetProperty("Passedcourse").GetValue(m, null);
+                return passedCourse ? "Passed" : "Failed";
+            });
        
 }).Empty("No data found").Filterable().Sortable().Pageable(pager =>
 {
     pager.RowsPerPage = 10;
 })
 
+
 @section Scripts {
     <script>
         document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
     </script>
+}
+
+@functions {
+    public string GetGPA(double averageTotal)
+    {
+        if (averageTotal >= 97)
+        {
+            return "4.0";
+        }
+        else if (averageTotal >= 93)
+        {
+            return "4.0";
+        }
+        else if (averageTotal >= 90)
+        {
+            return "3.7";
+        }
+        else if (averageTotal >= 87)
+        {
+            return "3.3";
+        }
+        else if (averageTotal >= 83)
+        {
+            return "3.0";
+        }
+        else if (averageTotal >= 80)
+        {
+            return "2.7";
+        }
+        else if (averageTotal >= 77)
+        {
+            return "2.3";
+        }
+        else if (averageTotal >= 73)
+        {
+            return "2.0";
+        }
+        else if (averageTotal >= 70)
+        {
+            return "1.7";
+        }
+        else if (averageTotal >= 67)
+        {
+            return "1.3";
+        }
+        else if (averageTotal >= 65)
+        {
+            return "1.0";
+        }
+        else
+        {
+            return "0.0";
+        }
+    }
+
+    public string GetLetterGrade(double averageTotal)
+    {
+        if (averageTotal >= 97)
+        {
+            return "A+";
+        }
+        else if (averageTotal >= 93)
+        {
+            return "A";
+        }
+        else if (averageTotal >= 90)
+        {
+            return "A-";
+        }
+        else if (averageTotal >= 87)
+        {
+            return "B+";
+        }
+        else if (averageTotal >= 83)
+        {
+            return "B";
+        }
+        else if (averageTotal >= 80)
+        {
+            return "B-";
+        }
+        else if (averageTotal >= 77)
+        {
+            return "C+";
+        }
+        else if (averageTotal >= 73)
+        {
+            return "C";
+        }
+        else if (averageTotal >= 70)
+        {
+            return "C-";
+        }
+        else if (averageTotal >= 67)
+        {
+            return "D+";
+        }
+        else if (averageTotal >= 65)
+        {
+            return "D";
+        }
+        else
+        {
+            return "F";
+        }
+    }
 }

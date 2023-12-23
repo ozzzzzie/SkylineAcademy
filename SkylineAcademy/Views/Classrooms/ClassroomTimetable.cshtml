@@ -1,0 +1,223 @@
+﻿@*@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Classroom Timetable";
+}
+
+<br />
+<p>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><button type="button" class="btn btn-outline-primary">Home</button></a>
+    }
+
+</p>
+<h1 align="center">Timetable</h1>
+<div align="center">
+    <form method="get" asp-action="ClassroomTimetable">
+
+        <div align="right">
+            <label for="academicYear">Academic Year:</label>
+            <select name="academicYear" class="form-control-sm" id="academicYear">
+                @for (int year = 2018; year <= 2028; year++)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+
+            <label for="semester">Semester:</label>
+            <select name="semester" class="form-control-sm" id="semester">
+                <option value="A">A</option>
+                <option value="B">B</option>
+            </select>
+
+            <label asp-for="clsroom" class="control-label">Classroom</label>
+            <select asp-for="clsroom" class="form-control" asp-items="ViewBag.Classrooms"></select>
+        </div><br />
+        <div align="right">
+            <button type="submit" class="btn btn-outline-primary">View Timetable</button>
+        </div>
+
+    </form>
+    <h6>Please select the academic year and semester to view the timetable.</h6>
+    <br />
+</div>
+
+@{
+    ViewBag.Title = "Classroom Timetable";
+    var days = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday" };
+    var times = new[] { "8AM TO 10AM", "10AM TO 12PM", "12PM TO 2PM", "2PM TO 4PM", "4PM TO 6PM", "6PM TO 8PM" };
+    int totalSlotsPerDay = 6;
+}
+
+
+
+@if (!Model.Any())
+{
+    <p>No timetable available for the selected academic year and semester.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                @foreach (var day in days)
+                {
+                    <th>@day</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int timeSlot = 1; timeSlot <= totalSlotsPerDay; timeSlot++)
+            {
+                <tr>
+                    <td>@times[timeSlot - 1]</td>
+                    @foreach (var day in days.Select((value, index) => new { value, index }))
+                    {
+                        <td>
+                            @foreach (var classInfo in Model.Where(m => m.Slot == (day.index + 1) + ((timeSlot - 1) * days.Length)))
+                            {
+                                <div>
+                                    <strong>@classInfo.CourseName</strong><br />
+                                    @classInfo.TeacherName<br />
+                                </div>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+*@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Classroom Timetable";
+    var days = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday" };
+    var times = new[] { "8AM TO 10AM", "10AM TO 12PM", "12PM TO 2PM", "2PM TO 4PM", "4PM TO 6PM", "6PM TO 8PM" };
+    int totalSlotsPerDay = 6;
+}
+
+<br />
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="" asp-controller="AdministratorDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Student"))
+    {
+        <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("Teacher"))
+    {
+        <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+
+    }
+    else if (User.IsInRole("SuperAdmin"))
+    {
+        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><button type="button" class="btn btn-outline-primary">Home</button></a>
+    }
+</p>
+
+<h1 align="center">Timetable</h1>
+
+<div align="center">
+    <form method="get" asp-action="ClassroomTimetable">
+        <div align="right">
+            <select name="academicYear" class="form-control-sm" id="academicYear">
+                @for (int year = 2018; year <= 2028; year++)
+                {
+                    <option value="@year">@year</option>
+                }
+            </select>
+
+            <label for="semester">Semester:</label>
+            <select name="semester" class="form-control-sm" id="semester">
+                <option value="A">A</option>
+                <option value="B">B</option>
+            </select>
+            <label for="clsroom">Classroom:</label>
+            <select name="clsroom" class="form-control-sm" id="clsroom">
+                <option value="">All Classrooms</option>
+                @foreach (var classroom in ViewBag.Classrooms as SelectList)
+                {
+                    <option value="@classroom.Value">@classroom.Text</option>
+                }
+            </select>
+        </div>
+        <br />
+        <div align="right">
+            <button type="submit" class="btn btn-outline-primary">View Timetable</button>
+        </div>
+    </form>
+    <h6>Please select the academic year and semester to view the timetable.</h6>
+    <br />
+</div>
+
+@if (!Model.Any())
+{
+    <div align="center">
+        <br /><br />
+        <p>No timetable available for the selected academic year, semester, and classroom.</p>
+        <p>All classrooms are free to use.</p>
+    </div>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                @foreach (var day in days)
+                {
+                    <th>@day</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int timeSlot = 1; timeSlot <= totalSlotsPerDay; timeSlot++)
+            {
+                <tr>
+                    <td>@times[timeSlot - 1]</td>
+                    @foreach (var day in days.Select((value, index) => new { value, index }))
+                    {
+                        <td>
+                            @foreach (var classInfo in Model.Where(m => m.Slot == (day.index + 1) + ((timeSlot - 1) * days.Length)))
+                            {
+                                <div>
+                                    <strong>@classInfo.CourseName</strong><br />
+                                    @classInfo.TeacherName<br />
+                                    Classroom: @classInfo.ClassroomNumber<br />
+                                    Facilities: @classInfo.Facilities <br />
+                                </div>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}

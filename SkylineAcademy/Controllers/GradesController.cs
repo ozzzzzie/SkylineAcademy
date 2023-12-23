@@ -119,6 +119,7 @@ namespace SkylineAcademy.Controllers
                           join Grade in _context.Grades on Enrollement.EnrollementId equals Grade.EnrollementId
                           join Student in _context.Students on Enrollement.StudentId equals Student.StudentId
                           join Course in _context.Courses on Convert.ToInt32(Enrollement.Schedule.CourseId) equals Course.CourseId
+                          join Teacher in _context.Teachers on Convert.ToInt32(Enrollement.Schedule.TeacherId) equals Teacher.TeacherId
                           where Convert.ToInt32(Enrollement.StudentId) == stu.StudentId
 
                           select new
@@ -128,6 +129,8 @@ namespace SkylineAcademy.Controllers
                               CourseId = Enrollement.Schedule.CourseId,
                               CourseName = Course.Cname,
                               TeacherId = Enrollement.Schedule.TeacherId,
+                              TeacherFirstName = Teacher.Tfname,
+                              TeacherLastName = Teacher.Tlname,
                               Midterm = Grade.Midterm,
                               Final = Grade.Final,
                               Total = Grade.Total,
@@ -135,6 +138,11 @@ namespace SkylineAcademy.Controllers
                               StudentFirstName = Student.Sfname,
                               StudentLastName = Student.Slname
                           };
+
+            var gradeTotals = results.Select(r => r.Total);
+            double averageTotal = (double)(gradeTotals.Any() ? gradeTotals.Average() : 0.0);
+
+            ViewBag.AverageTotal = averageTotal;
 
             return View(results.ToList());
         }

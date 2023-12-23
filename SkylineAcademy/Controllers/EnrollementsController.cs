@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,19 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
+
         // GET: Enrollements
+
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.Enrollements.Include(e => e.Schedule).Include(e => e.Student);
             return View(await myDbContext.ToListAsync());
         }
+
+        //GET: Student Previous Enrollements
+        [Authorize]
         public ActionResult StuPrevEnrollements()
         {
             Student stu = _context.Students.Where(x => x.Semail == User.Identity.Name).FirstOrDefault();
@@ -47,6 +54,76 @@ namespace SkylineAcademy.Controllers
 
             return View(stuprevenr);
         }
+
+        //GET: Student Timetables
+
+        [Authorize]
+        public IActionResult StudentTimetable(string academicYear, string semester)
+        {
+            // Get the current student's ID
+            Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
+
+            if (stu == null)
+            {
+                // Handle the case where the student isn't found
+                return View("Error"); // Or another appropriate response
+            }
+
+            // Query to join tables and select required data
+            var query = from enrollement in _context.Enrollements
+                        join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
+                        join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
+                        join classroom in _context.Classrooms on Convert.ToInt32(schedule.ClassroomId) equals classroom.ClassroomId
+                        where enrollement.StudentId == stu.StudentId &&
+                              schedule.Academicyear == academicYear &&
+                              schedule.Semester == semester
+                        select new
+                        {
+                            CourseName = course.Cname,
+                            TeacherName = teacher.Tfname + " " + teacher.Tlname,
+                            ClassroomNumber = classroom.ClassroomId,
+                            Slot = schedule.Slot.SlotId
+                        };
+
+            return View(query.ToList());
+        }
+
+        //GET: Teacher Timetables
+
+        [Authorize]
+        public IActionResult TeacherTimetable(string academicYear, string semester)
+        {
+            // Get the current teacher's ID
+            Teacher tch = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+
+            if (tch == null)
+            {
+                // Handle the case where the teacher isn't found
+                return View("Error"); 
+            }
+
+            // Query to join tables and select required data
+            var query = from enrollement in _context.Enrollements
+                        join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
+                        join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
+                        join classroom in _context.Classrooms on Convert.ToInt32(schedule.ClassroomId) equals classroom.ClassroomId
+                        where Convert.ToInt32(enrollement.Schedule.TeacherId) == tch.TeacherId &&
+                              schedule.Academicyear == academicYear &&
+                              schedule.Semester == semester
+                        select new
+                        {
+                            CourseName = course.Cname,
+                            ClassroomNumber = classroom.ClassroomId,
+                            Slot = schedule.Slot.SlotId
+                        };
+
+            return View(query.ToList());
+        }
+
+        //GET: Teacher's Previous Enrollements
+        [Authorize]
 
         public ActionResult TeachPrevEnrollements()
         {
@@ -70,8 +147,11 @@ namespace SkylineAcademy.Controllers
             return View(teachprevenr);
         }
 
-        [Authorize]
+
         // GET: Enrollements/Details/5
+
+        [Authorize]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Enrollements == null)
@@ -90,8 +170,12 @@ namespace SkylineAcademy.Controllers
 
             return View(enrollement);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         // GET: Enrollements/Create
+
+        [Authorize(Roles = "SuperAdmin,Admin")]
+
         public IActionResult Create()
         {
             ViewData["ScheduleId"] = new SelectList(_context.ClassSchedules, "ScheduleId", "ScheduleId");
@@ -99,37 +183,14 @@ namespace SkylineAcademy.Controllers
             return View();
         }
         [Authorize(Roles = "SuperAdmin,Admin")]
+
+
+
+
         // POST: Enrollements/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
-        //{
-        //      var stuEnr = _context.ClassSchedules.Where(e => e.ScheduleId == enrollement.ScheduleId).FirstOrDefault();
-
-        //        List<Prerequisite> crses = _context.Prerequisites.Where(e => e.CourseId.ToString() == stuEnr.CourseId.ToString()).ToList();
-
-        //        foreach (Prerequisite i in crses)
-        //        {
-        //            var chk  = _context.Enrollements.Where(x=> x.StudentId == enrollement.StudentId && x.Schedule.CourseId == i.PrerequisiteId).Count();
-
-        //            if (chk == 0)
-        //            {
-        //                ModelState.AddModelError("ScheduleId", "Student has not completed the course prerequisite.");
-        //            }
-        //        } 
-        //    if (ModelState.IsValid)
-        //    {
-        //         _context.Add(enrollement);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ScheduleId"] = new SelectList(_context.ClassSchedules, "ScheduleId", "ScheduleId", enrollement.ScheduleId);
-        //    ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", enrollement.StudentId);
-        //    return View(enrollement);
-        //}
-
         public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
         {
             var stuEnr = await _context.ClassSchedules.FirstOrDefaultAsync(e => e.ScheduleId == enrollement.ScheduleId);
@@ -181,8 +242,12 @@ namespace SkylineAcademy.Controllers
             return View(enrollement);
         }
 
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         // GET: Enrollements/Edit/5
+
+
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Enrollements == null)
@@ -199,10 +264,13 @@ namespace SkylineAcademy.Controllers
             ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", enrollement.StudentId);
             return View(enrollement);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         // POST: Enrollements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
@@ -272,8 +340,14 @@ namespace SkylineAcademy.Controllers
             ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId", enrollement.StudentId);
             return View(enrollement);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
+
         // GET: Enrollements/Delete/5
+
+
+        [Authorize(Roles = "SuperAdmin,Admin")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Enrollements == null)
@@ -292,8 +366,13 @@ namespace SkylineAcademy.Controllers
 
             return View(enrollement);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         // POST: Enrollements/Delete/5
+
+        [Authorize(Roles = "SuperAdmin,Admin")]
+
+               
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
