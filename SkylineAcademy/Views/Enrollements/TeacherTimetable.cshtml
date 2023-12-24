@@ -29,10 +29,18 @@
 
 </p>
 <h1 align="center">Timetable</h1>
-<div align="center">
-        <form method="get" asp-action="TeacherTimetable">
-
-            <div align="right">
+<div style="display: flex; justify-content: space-between;">
+    <div>
+        <br />
+        <h6>Current Selection:</h6>
+            <p>
+                <strong>Academic Year:</strong> @Context.Request.Query["academicYear"] <br />
+                <strong>Semester:</strong> @Context.Request.Query["semester"]
+            </p>
+        </div>
+        <div style="display: flex; align-items: center;">
+            <form method="get" asp-action="TeacherTimetable">
+                <div>
                     <label for="academicYear">Academic Year:</label>
                     <select name="academicYear" class="form-control-sm" id="academicYear">
                         @for (int year = 2018; year <= 2028; year++)
@@ -46,15 +54,14 @@
                         <option value="A">A</option>
                         <option value="B">B</option>
                     </select>
-            </div><br />
-            <div align="right">
-                  <button type="submit" class="btn btn-outline-primary">View Timetable</button>
-            </div>
-
-    </form>
-    <h6>Please select the academic year and semester to view the timetable.</h6>
-    <br />
-</div>
+                </div>
+                <br />
+                <div align="right">
+                    <button type="submit" class="btn btn-info">View Timetable</button>
+                </div>
+            </form> 
+    </div>
+</div><br />
 
 @{
     ViewBag.Title = "Teacher Timetable";

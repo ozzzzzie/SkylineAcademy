@@ -83,22 +83,6 @@ Html
                 model.CourseId
                 })).Filterable(false);
             }
-            else if (User.IsInRole("Student"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
-            }
-            else if (User.IsInRole("Teacher"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
-            }
             else if (User.IsInRole("SuperAdmin"))
             {
                 columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new

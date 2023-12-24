@@ -68,10 +68,10 @@ Html
  .Grid(Model)
  .Build(columns =>
  {
-     columns.Add(model => model.Afname).Titled("First Name");
-     columns.Add(model => model.Alname).Titled("Last Name");
-     columns.Add(model => model.Aemail).Titled("Email");
-     columns.Add(model => model.Job.Jname).Titled("Job");
+            columns.Add(model => model.AdministratorId).Titled("ID");
+            columns.Add().Titled("Name").RenderedAs(model => $"{model.Afname} {model.Alname}");
+            columns.Add(model => model.Aemail).Titled("Email");
+            columns.Add(model => model.Job.Jname).Titled("Job");
 
 
 
@@ -85,13 +85,6 @@ Html
                 model.AdministratorId
                  })).Filterable(false);
 
-                 columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                 {
-                     id =
-                model.AdministratorId
-                 })).Filterable(false);
-
-
                  columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
                  {
                      id =
@@ -99,22 +92,6 @@ Html
                  })).Filterable(false);
             }
 
-            else if (User.IsInRole("Student"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.AdministratorId
-                })).Filterable(false);
-            }
-            else if (User.IsInRole("Teacher"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.AdministratorId
-                })).Filterable(false);
-            }
             else if (User.IsInRole("SuperAdmin"))
             {
                 columns.Add(model => model.Aaddress).Titled("Address");

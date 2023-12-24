@@ -1,5 +1,11 @@
-﻿@model List<SkylineAcademy.Models.Enrollement>
+﻿@model IEnumerable<dynamic>
 @using NonFactors.Mvc.Grid
+
+@{
+    ViewData["Title"] = "Enrollment History";
+}
+
+
 <br />
 <a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
 <br />
@@ -7,24 +13,36 @@
 <h1 align="center">Enrollment History</h1>
 <br />
 <br />
-<br />
+<br /
 <div class="table grid-container">
     @(Html
         .Grid(Model)
         .Build(columns =>
         {
-            columns.Add(model => model.EnrollementId).Titled("Enrollment ID");
-            columns.Add(model => model.Schedule.CourseId).Titled("Course ID");
-            columns.Add(model => model.Schedule.TeacherId).Titled("Teacher ID");
-            columns.Add(model => model.Schedule.Semester).Titled("Semester");
-            columns.Add(model => model.Schedule.Academicyear).Titled("Academic Year");
+            columns.Add().Titled("Course Name")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
+
+            columns.Add().Titled("Teacher Name")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("TeacherName").GetValue(m, null).ToString());
+
+            columns.Add().Titled("Day")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("SlotDay").GetValue(m, null).ToString());
+
+            columns.Add().Titled("Timing")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("SlotTiming").GetValue(m, null).ToString());
+
+            columns.Add().Titled("Semester")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("Semester").GetValue(m, null).ToString());
+
+            columns.Add().Titled("Academic Year")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("AcademicYear").GetValue(m, null).ToString());
         })
         .Empty("No data found")
         .Filterable()
         .Sortable()
         .Pageable(pager =>
         {
-            pager.RowsPerPage = 24;
+            pager.RowsPerPage = 10;
         })
         )
 </div>

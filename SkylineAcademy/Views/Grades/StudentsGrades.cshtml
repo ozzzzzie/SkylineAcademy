@@ -53,9 +53,13 @@ else if (User.IsInRole("Student") && ViewBag.AverageTotal != 0)
 {
     @if (ViewBag.AverageTotal != null)
     {
-        <h3>Average Total: @ViewBag.AverageTotal</h3>
-        <h3>GPA: @GetGPA(ViewBag.AverageTotal)</h3>
-        <h3>Letter Grade: @GetLetterGrade(ViewBag.AverageTotal)</h3>
+        <div align="right">
+            <h6>Average Total: @ViewBag.AverageTotal</h6>
+            <h6>GPA: @GetGPA(ViewBag.AverageTotal)</h6>
+            <h6>Letter Grade: @GetLetterGrade(ViewBag.AverageTotal)</h6>
+        </div>
+        <br />
+
     }
 } 
 else if (User.IsInRole("Student") && ViewBag.AverageTotal == 0)
@@ -70,8 +74,8 @@ else
 
 @Html.Grid(Model).Build(columns =>
 {
-        columns.Add().Titled("Grade ID")
-        .RenderedAs(m => ((object)m).GetType().GetProperty("GradeId").GetValue(m, null).ToString());
+        //columns.Add().Titled("Grade ID")
+        //.RenderedAs(m => ((object)m).GetType().GetProperty("GradeId").GetValue(m, null).ToString());
 
         columns.Add().Titled("Course ID")
         .RenderedAs(m => ((object)m).GetType().GetProperty("CourseId").GetValue(m, null).ToString());
@@ -79,18 +83,18 @@ else
         columns.Add().Titled("Course Name")
         .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
 
-        columns.Add().Titled("Student ID")
-        .RenderedAs(m => ((object)m).GetType().GetProperty("StudentId").GetValue(m, null).ToString());
+        //columns.Add().Titled("Student ID")
+        //.RenderedAs(m => ((object)m).GetType().GetProperty("StudentId").GetValue(m, null).ToString());
 
-        columns.Add().Titled("Student Name").RenderedAs(m =>
-            {
-                string firstName = ((object)m).GetType().GetProperty("StudentFirstName").GetValue(m, null).ToString();
-                string lastName = ((object)m).GetType().GetProperty("StudentLastName").GetValue(m, null).ToString();
-                return $"{firstName} {lastName}";
-            });
+        //columns.Add().Titled("Student Name").RenderedAs(m =>
+        //    {
+        //        string firstName = ((object)m).GetType().GetProperty("StudentFirstName").GetValue(m, null).ToString();
+        //        string lastName = ((object)m).GetType().GetProperty("StudentLastName").GetValue(m, null).ToString();
+        //        return $"{firstName} {lastName}";
+        //    });
 
-        columns.Add().Titled("Teacher ID")
-        .RenderedAs(m => ((object)m).GetType().GetProperty("TeacherId").GetValue(m, null).ToString());
+        //columns.Add().Titled("Teacher ID")
+        //.RenderedAs(m => ((object)m).GetType().GetProperty("TeacherId").GetValue(m, null).ToString());
 
         columns.Add().Titled("Teacher Name").RenderedAs(m =>
             {

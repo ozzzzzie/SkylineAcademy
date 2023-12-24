@@ -3,9 +3,15 @@
 @{
     ViewData["Title"] = "Profile";
 }
-
 <br />
-<h1>Profile Information</h1>
+<br />
+<div style="display: flex; align-items: center;">
+    <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index">
+        <button type="button" class="btn btn-outline-primary">Back to Dashboard</button>
+    </a>
+    <h1 style="flex: 1; margin: 0;" align="center">Profile Information</h1>
+</div>
+<br />
 <hr />
 <br />
 <h5>Name:</h5>
@@ -61,4 +67,4 @@
 
 <br /><br /><br /><br />
 
-<h6>To edit any information on this page, please contact the relevant administrator.</h6>
+<h6 align="center">Need to edit your information? Please see the school administrator.</h6>

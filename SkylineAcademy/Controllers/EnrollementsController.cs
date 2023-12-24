@@ -33,26 +33,58 @@ namespace SkylineAcademy.Controllers
 
         //GET: Student Previous Enrollements
         [Authorize]
+        //public ActionResult StuPrevEnrollements()
+        //{
+        //    Student stu = _context.Students.Where(x => x.Semail == User.Identity.Name).FirstOrDefault();
+        //    List<Enrollement> stuprevenr = _context.Enrollements.Where(x => x.StudentId == stu.StudentId).ToList();
+
+        //    foreach (Enrollement enrollement in stuprevenr)
+        //    {
+        //        List<ClassSchedule> sched = _context.ClassSchedules.Where(x => x.ScheduleId == enrollement.ScheduleId).ToList();
+
+        //        foreach (ClassSchedule i in sched)
+        //        {
+        //            if (int.TryParse(i.TeacherId, out int teacherId))
+        //            {
+        //                List<Teacher> teacher = _context.Teachers.Where(x => x.TeacherId == teacherId).ToList();
+
+        //            }
+        //        }
+        //    }
+
+        //    return View(stuprevenr);
+        //}
+
         public ActionResult StuPrevEnrollements()
         {
-            Student stu = _context.Students.Where(x => x.Semail == User.Identity.Name).FirstOrDefault();
-            List<Enrollement> stuprevenr = _context.Enrollements.Where(x => x.StudentId == stu.StudentId).ToList();
-
-            foreach (Enrollement enrollement in stuprevenr)
+            Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
+            if (stu == null)
             {
-                List<ClassSchedule> sched = _context.ClassSchedules.Where(x => x.ScheduleId == enrollement.ScheduleId).ToList();
-
-                foreach (ClassSchedule i in sched)
-                {
-                    if (int.TryParse(i.TeacherId, out int teacherId))
-                    {
-                        List<Teacher> teacher = _context.Teachers.Where(x => x.TeacherId == teacherId).ToList();
-
-                    }
-                }
+                // Handle the case where the student isn't found
+                return View("Error"); // Or another appropriate response
             }
 
-            return View(stuprevenr);
+            // Retrieve the enrollments and associated schedules, teachers, slots and courses for the student
+            var enrollements = from enrollement in _context.Enrollements
+                               join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+                               join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
+                               join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
+                               join slot in _context.Slots on schedule.SlotId equals slot.SlotId
+                               where enrollement.StudentId == stu.StudentId
+                               select new  
+                               {
+                                   Enrollment = enrollement.EnrollementId,
+                                   Schedule = schedule.ScheduleId,
+                                   CourseName = course.Cname,
+                                   TeacherName = teacher.Tfname + " " + teacher.Tlname,
+                                   SlotDay = slot.WeekdayName,
+                                   SlotTiming = slot.StartTime + " - " + slot.EndTime,
+                                   Semester = schedule.Semester,
+                                   AcademicYear = schedule.Academicyear
+                                   
+                               };
+
+               return View(enrollements.ToList());
         }
 
         //GET: Student Timetables
@@ -127,25 +159,32 @@ namespace SkylineAcademy.Controllers
 
         public ActionResult TeachPrevEnrollements()
         {
-            Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+            // Get the current teacher's ID
+            Teacher tch = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
 
-            List<ClassSchedule> sched = _context.ClassSchedules
-                .Where(x => Convert.ToInt32(x.TeacherId) == techr.TeacherId)
-                .ToList();
-
-            List<Enrollement> teachprevenr = new List<Enrollement>();
-
-            foreach (ClassSchedule schedule in sched)
+            if (tch == null)
             {
-                List<Enrollement> enrollements = _context.Enrollements
-                    .Where(x => x.ScheduleId == schedule.ScheduleId)
-                    .ToList();
-
-                teachprevenr.AddRange(enrollements);
+                // Handle the case where the teacher isn't found
+                return View("Error");
             }
 
-            return View(teachprevenr);
+            // Query to join tables and select required data
+            var query = from enrollement in _context.Enrollements
+                        join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId  // Assuming CourseId is a compatible type
+                        where Convert.ToInt32(schedule.TeacherId) == tch.TeacherId  // Assuming TeacherId is a string in ClassSchedules
+                        select new
+                        {
+                            EnrollementId = enrollement.EnrollementId,
+                            CourseName = course.Cname,
+                            Semester = schedule.Semester,
+                            AcademicYear = schedule.Academicyear,
+                            TeacherId = tch.TeacherId  // Directly use tch.TeacherId as it's already known
+                        };
+
+            return View(query.ToList());
         }
+
 
 
         // GET: Enrollements/Details/5

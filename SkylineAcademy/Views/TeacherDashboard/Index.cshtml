@@ -1,12 +1,12 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Teacher Dashboard";
 }
 <br />
-<h1>Teacher Dashboard</h1>
-
 <br />
-<table class="table">
+<h1 align="center">Teacher Dashboard</h1>
+<br />
+@*<table class="table">
     <tr>
         <th colspan="3">
             Teacher Information
@@ -54,8 +54,8 @@
                 <button type="button" class="btn btn-light">Manage Grades</button>
             </a>
 
-        </td>
-        <td>
+        </td>*@
+ @*       <td>
             <img src="/images/courses.png" alt="Courses Image" />
         </td>
         <td colspan="2">
@@ -71,9 +71,9 @@
             <a href="@Url.Action("Index", "Prerequisites")">
                 <button type="button" class="btn btn-light">Prerequisites</button></a>
 
-        </td>
-    </tr>
-    <tr>
+        </td>*@
+   @* </tr>*@
+@*    <tr>
         <th colspan="3">
             Contant Information
         </th>
@@ -112,5 +112,103 @@
             </a>
 
         </td>
-    </tr>
-</table>
+    </tr>*@
+@*</table>*@
+<br />
+<h4>Teacher Information</h4>
+<div class="tile-container">
+    <div class="tile">
+        <a href="@Url.Action("Index", "Profile")">
+            <br />
+            <img src="/images/profile.png" alt="Profile Image" />
+            <br /> <br />
+            <h5>Profile</h5>
+        </a>
+    </div>
+
+    <div class="tile">
+        <a href="@Url.Action("TeacherTimetable", "Enrollements")">
+            <br />
+            <img src="/images/timetable.png" alt="Timetable Image" />
+            <br /> <br />
+            <h5>Timetable</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("TeachPrevEnrollements", "Enrollements")">
+            <br />
+            <img src="/images/prevenrollments.png" alt="Enrollments History Image" />
+            <br /> <br />
+            <h5>Enrollment History</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("TeacherStudentsGrades", "Grades")">
+            <br />
+            <img src="/images/grades.png" alt="Manage Grades Image" />
+            <br /> <br />
+            <h5>Manage Grades</h5>
+        </a>
+    </div>
+</div>
+<br />
+@*<h4>Teaching Information</h4>*@
+<div class="tile-container">
+    <div class="tile">
+        <a href="@Url.Action("ClassroomTimetable", "Classrooms")">
+            <br />
+            <img src="/images/classroomavailability.png" alt="Classroom Availability Image" />
+            <br /> <br />
+            <h5>Classroom Timetables</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("Index", "Courses")">
+            <br />
+            <img src="/images/courses.png" alt="Courses Image" />
+            <br /> <br />
+            <h5>Courses</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("Index", "Prerequisites")">
+            <br />
+            <img src="/images/prerequisite.png" alt="Prerequisites Image" />
+            <br /> <br />
+            <h5>Prerequisites</h5>
+        </a>
+    </div>
+    <div class="tile-invisible">
+    </div>
+</div>
+<br />
+<br />
+<h4>Contact Information</h4>
+<div class="tile-container">
+    <div class="tile">
+        <a href="@Url.Action("Index", "Teachers")">
+            <br />
+            <img src="/images/teacher.png" alt="Teachers Image" />
+            <br /> <br />
+            <h5>Teachers</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("Index", "Administrators")">
+            <br />
+            <img src="/images/admin.png" alt="Administrators Image" />
+            <br /> <br />
+            <h5>Administrators</h5>
+        </a>
+    </div>
+    <div class="tile">
+        <a href="@Url.Action("Index", "Students")">
+            <br />
+            <img src="/images/students.png" alt="Students Image" />
+            <br /> <br />
+            <h5>Students</h5>
+        </a>
+    </div>
+    <div class="tile-invisible">
+    </div>
+</div>

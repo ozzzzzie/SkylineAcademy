@@ -21,12 +21,35 @@ namespace SkylineAcademy.Controllers
         }
         [Authorize]
         // GET: Prerequisites
+        //public async Task<IActionResult> Index()
+        //{
+        //      return _context.Prerequisites != null ? 
+        //                  View(await _context.Prerequisites.ToListAsync()) :
+        //                  Problem("Entity set 'MyDbContext.Prerequisites'  is null.");
+        //}
+
         public async Task<IActionResult> Index()
         {
-              return _context.Prerequisites != null ? 
-                          View(await _context.Prerequisites.ToListAsync()) :
-                          Problem("Entity set 'MyDbContext.Prerequisites'  is null.");
+            if (_context.Prerequisites == null)
+            {
+                return Problem("Entity set 'MyDbContext.Prerequisites' is null.");
+            }
+
+            // Perform a LINQ query to join the Courses and Prerequisites
+            var courseWithPrerequisites = await (from prerequisite in _context.Prerequisites
+                                                 join course in _context.Courses on prerequisite.CourseId equals course.CourseId
+                                                 join preCourse in _context.Courses on Convert.ToInt32(prerequisite.PrerequisiteId) equals preCourse.CourseId
+                                                 select new
+                                                 {
+                                                     CourseId = course.CourseId,
+                                                     CourseName = course.Cname,
+                                                     PrerequisiteId = preCourse.CourseId,
+                                                     PrerequisiteName = preCourse.Cname
+                                                 }).ToListAsync();
+
+            return View(courseWithPrerequisites);
         }
+
         [Authorize]
         // GET: Prerequisites/Details/5
         public async Task<IActionResult> Details(int? id)

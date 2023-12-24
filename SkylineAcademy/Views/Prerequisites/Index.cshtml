@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SkylineAcademy.Models.Prerequisite>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewData["Title"] = "Prerequisites";
@@ -50,87 +50,33 @@ else
 }
 
 <div class="table grid-container">
-@(
-Html
- .Grid(Model)
- .Build(columns =>
- {
-     columns.Add(model => model.CourseId).Titled("Course ID");
-     columns.Add(model => model.PrerequisiteId).Titled("Prerequisite ID");
+    @(
+        Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            columns.Add().Titled("Course ID")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("CourseId").GetValue(m, null).ToString());
+            columns.Add().Titled("Course Name")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
+            columns.Add().Titled("Prerequisite ID")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("PrerequisiteId").GetValue(m, null).ToString());
+            columns.Add().Titled("Prerequisite Name")
+            .RenderedAs(m => ((object)m).GetType().GetProperty("PrerequisiteName").GetValue(m, null).ToString());
 
-
-
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin")|| User.IsInRole("SuperAdmin"))
             {
-                @*     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
-                        {
-                        id =
-                        model.CourseId
-                        })).Filterable(false);*@
-
-
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-            model.CourseId
-                })).Filterable(false);
-
-
-                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
-            }
-            else if (User.IsInRole("Student"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
-            }
-            else if (User.IsInRole("Teacher"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
-            }
-            else if (User.IsInRole("SuperAdmin"))
-            {
-                @*     columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new
-                        {
-                        id =
-                        model.CourseId
-                        })).Filterable(false);*@
-
-
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-            model.CourseId
-                })).Filterable(false);
-
-
-                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
-                {
-                    id =
-                model.CourseId
-                })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.CourseId })).Filterable(false);
+                columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new { id = model.CourseId })).Filterable(false);
             }
 
- })
-
- .Empty("No data found")
- .Filterable()
- .Sortable()
- .Pageable(pager =>
- {
-     pager.RowsPerPage = 10;
- })
-)
+        })
+        .Empty("No data found").Filterable().Sortable()
+        .Pageable(pager =>
+        {
+            pager.RowsPerPage = 21;
+        })
+        )
 </div>
 @section Scripts {
     <script>

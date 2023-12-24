@@ -45,11 +45,34 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades/Create
+        //public IActionResult Create()
+        //{
+        //    var enrollements = _context.Enrollements.ToList();
+
+        //    ViewBag.Enrollements = new SelectList(enrollements, "EnrollementId", "EnrollementId");
+
+        //    return View();
+        //}
         public IActionResult Create()
         {
-            var enrollements = _context.Enrollements.ToList();
+            // Get the current teacher's ID
+            Teacher tch = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+            if (tch == null)
+            {
+                // Handle the case where the teacher isn't found
+                return View("Error");
+            }
 
-            ViewBag.Enrollements = new SelectList(enrollements, "EnrollementId", "EnrollementId");
+            var enrollments = _context.Enrollements
+                .Where(e => _context.ClassSchedules.Any(cs => cs.ScheduleId == e.ScheduleId && Convert.ToInt32(cs.TeacherId) == tch.TeacherId))
+                .Select(e => new
+                {
+                    EnrollementId = e.EnrollementId,
+                    Description = $"ID: {e.EnrollementId} - Student: {_context.Students.FirstOrDefault(s => s.StudentId == e.StudentId).Sfname} - Course: {_context.Courses.FirstOrDefault(c => c.CourseId == Convert.ToInt32(e.Schedule.CourseId)).Cname}"
+                })
+                .ToList();
+
+            ViewBag.Enrollments = new SelectList(enrollments, "EnrollementId", "Description");
 
             return View();
         }

@@ -67,10 +67,10 @@ else
     Html.Grid(Model)
         .Build(columns =>
         {
-            columns.Add(model => model.Tfname).Titled("First Name");
-            columns.Add(model => model.Tlname).Titled("Last Name");
+            columns.Add(model => model.TeacherId).Titled("ID");
+            columns.Add().Titled("Name").RenderedAs(model => $"{model.Tfname} {model.Tlname}");
             columns.Add(model => model.Email).Titled("Email");
-            columns.Add(model => model.Ishead).Titled("Head");
+            columns.Add().Titled("Head").RenderedAs(model => model.Ishead ? "Yes" : "No");
             columns.Add(model => model.Faculty.Fname).Titled("Faculty");
             
             if(User.IsInRole("Admin"))
@@ -78,18 +78,7 @@ else
                 columns.Add(model => model.Taddress).Titled("Address");
                 columns.Add(model => model.Tphonenumber).Titled("Phone Number");
                 columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new { id = model.TeacherId })).Filterable(false);
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.TeacherId })).Filterable(false);
                 columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new { id = model.TeacherId })).Filterable(false);
-            }
-            else if (User.IsInRole("Student"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.TeacherId })).Filterable(false);
-
-            }
-            else if (User.IsInRole("Teacher"))
-            {
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.TeacherId })).Filterable(false);
-
             }
             else if (User.IsInRole("SuperAdmin"))
             {
@@ -98,10 +87,7 @@ else
                 columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new { id = model.TeacherId })).Filterable(false);
                 columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new { id = model.TeacherId })).Filterable(false);
                 columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new { id = model.TeacherId })).Filterable(false);
-            }
-        
-        
-        
+            }        
         })
         .Empty("No data found")
         .Filterable()

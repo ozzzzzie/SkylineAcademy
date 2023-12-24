@@ -1,4 +1,4 @@
-﻿@model List<SkylineAcademy.Models.Enrollement>
+﻿@*@model List<SkylineAcademy.Models.Enrollement>
 @using NonFactors.Mvc.Grid
 <br />
 <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
@@ -27,6 +27,63 @@
             pager.RowsPerPage = 24;
         })
         )
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".mvc-grid").forEach(element => new MvcGrid(element));
+    </script>
+}
+*@
+
+@model IEnumerable<dynamic>  
+@{
+    Layout = "_Layout"; // Or whatever your layout file is
+    ViewBag.Title = "Teacher Previous Enrollments";
+}
+@using NonFactors.Mvc.Grid
+<br />
+<a asp-area="" asp-controller="TeacherDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
+<br />
+<br />
+<h1 align="center">Enrollment History</h1>
+<br />
+<br />
+<br />
+
+@*<h1 align="center">Teacher Enrollment History</h1>
+
+<div>
+    <a asp-area="" asp-controller="TeacherDashboard" asp-action="Index">
+        <button type="button" class="btn btn-outline-primary">Back to Dashboard</button>
+    </a>
+</div>
+
+<br />*@
+
+<div class="table grid-container">
+    @(Html
+        .Grid(Model)
+        .Build(columns =>
+        {
+            // Adjust the property names to match those defined in your controller's select statement
+            columns.Add().Titled("Enrollment ID")
+                .RenderedAs(m => ((object)m).GetType().GetProperty("EnrollementId").GetValue(m, null).ToString());
+            columns.Add().Titled("Course Name")
+                .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
+            columns.Add().Titled("Semester")
+                .RenderedAs(m => ((object)m).GetType().GetProperty("Semester").GetValue(m, null).ToString());
+            columns.Add().Titled("Academic Year")
+                .RenderedAs(m => ((object)m).GetType().GetProperty("AcademicYear").GetValue(m, null).ToString());
+        })
+        .Empty("No previous enrollments found.")
+        .Filterable()
+        .Sortable()
+        .Pageable(pager =>
+        {
+            pager.RowsPerPage = 15;
+        })
+    )
 </div>
 
 @section Scripts {

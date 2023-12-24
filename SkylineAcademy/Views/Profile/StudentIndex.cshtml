@@ -4,11 +4,17 @@
     ViewData["Title"] = "Profile";
 }
 
+
 <br />
-<a asp-area="" asp-controller="StudentDashboard" asp-action="Index"><button type="button" class="btn btn-outline-primary">Back to Dashboard</button></a>
 <br />
+<div style="display: flex; align-items: center;">
+    <a asp-area="" asp-controller="StudentDashboard" asp-action="Index">
+        <button type="button" class="btn btn-outline-primary">Back to Dashboard</button>
+    </a>
+    <h1 style="flex: 1; margin: 0;" align="center">Profile Information</h1>
+</div>
+
 <br />
-<h1 align="center">Profile Information</h1>
 <hr />
 <br />
 <h5>Name:</h5>
