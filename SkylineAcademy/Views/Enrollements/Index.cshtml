@@ -59,8 +59,7 @@ else
             columns.Add(model => model.EnrollementId).Titled("Enrollement ID");
             columns.Add(model => model.StudentId).Titled("Student ID");
             columns.Add(model => model.ScheduleId).Titled("Schedule ID");
-@*            columns.Add(model => model.EnrollementDate).Titled("Enrollement Date");
-*@
+
             if (User.IsInRole("Admin"))
             {
                 columns.Add().RenderedAs(model => Html.ActionLink("Edit", "Edit", new

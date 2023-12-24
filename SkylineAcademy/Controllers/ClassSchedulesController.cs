@@ -58,9 +58,12 @@ namespace SkylineAcademy.Controllers
             var classrooms = _context.Classrooms.ToList();
 
             // Pass the lists to the view using the ViewBag
-            ViewBag.Teachers = new SelectList(teachers, "TeacherId", "TeacherId");
+            ViewBag.Teachers = new SelectList(teachers.Select(t => new {
+                TeacherId = t.TeacherId,
+                FullName = t.Tfname + " " + t.Tlname
+            }), "TeacherId", "FullName");
             ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
-            ViewBag.Courses = new SelectList(courses, "CourseId", "CourseId");
+            ViewBag.Courses = new SelectList(courses, "CourseId", "Cname");
 
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId");
             return View();
@@ -162,9 +165,12 @@ namespace SkylineAcademy.Controllers
             var classrooms = _context.Classrooms.ToList();
 
             // Pass the lists to the view using the ViewBag
-            ViewBag.Teachers = new SelectList(teachers, "TeacherId", "TeacherId");
+            ViewBag.Teachers = new SelectList(teachers.Select(t => new {
+                TeacherId = t.TeacherId,
+                FullName = t.Tfname + " " + t.Tlname
+            }), "TeacherId", "FullName");
             ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
-            ViewBag.Courses = new SelectList(courses, "CourseId", "CourseId");
+            ViewBag.Courses = new SelectList(courses, "CourseId", "Cname");
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }

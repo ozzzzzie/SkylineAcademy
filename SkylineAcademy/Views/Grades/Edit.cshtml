@@ -13,31 +13,6 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="GradeId" />
-@*            <div class="form-group">
-                <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
-                <input asp-for="EnrollementId" class="form-control" />
-                <span asp-validation-for="EnrollementId" class="text-danger"></span>
-            </div><br />
-            <div class="form-group">
-                <label asp-for="Midterm" class="control-label"></label>
-                <input asp-for="Midterm" class="form-control" />
-                <span asp-validation-for="Midterm" class="text-danger"></span>
-            </div><br />
-            <div class="form-group">
-                <label asp-for="Final" class="control-label"></label>
-                <input asp-for="Final" class="form-control" />
-                <span asp-validation-for="Final" class="text-danger"></span>
-            </div><br />
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div><br />
-            <div class="form-group">
-                <label asp-for="Passedcourse" class="control-label"></label>
-                <input asp-for="Passedcourse" class="form-control" />
-                <span asp-validation-for="Passedcourse" class="text-danger"></span>
-            </div><br />*@
             <div class="form-group">
                 <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
                 <select asp-for="EnrollementId" class="form-control" asp-items="ViewBag.Enrollements"></select>

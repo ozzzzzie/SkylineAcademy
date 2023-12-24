@@ -65,18 +65,12 @@ else
         columns.Add().Titled("Course Name")
         .RenderedAs(m => ((object)m).GetType().GetProperty("CourseName").GetValue(m, null).ToString());
 
-        //columns.Add().Titled("Student ID")
-        //.RenderedAs(m => ((object)m).GetType().GetProperty("StudentId").GetValue(m, null).ToString());
-
         columns.Add().Titled("Student Name").RenderedAs(m =>
             {
                 string firstName = ((object)m).GetType().GetProperty("StudentFirstName").GetValue(m, null).ToString();
                 string lastName = ((object)m).GetType().GetProperty("StudentLastName").GetValue(m, null).ToString();
                 return $"{firstName} {lastName}";
             });
-
-        //columns.Add().Titled("Teacher ID")
-        //.RenderedAs(m => ((object)m).GetType().GetProperty("TeacherId").GetValue(m, null).ToString());
 
         columns.Add().Titled("Midterm")
         .RenderedAs(m => ((object)m).GetType().GetProperty("Midterm").GetValue(m, null).ToString());
@@ -100,9 +94,7 @@ else
         var deleteUrl = Url.Action("Delete", new { id = model.GradeId });
 
         return Html.Raw(
-            //$"<a href='{detailsUrl}'>Details</a> | " +
             $"<a href='{editUrl}'>Edit</a>" 
-            //$"<a href='{deleteUrl}'>Delete</a>"
         );
     }).Encoded(false).Filterable(false);
 }).Empty("No data found").Filterable().Sortable().Pageable(pager =>
