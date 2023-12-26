@@ -54,7 +54,7 @@ else if (User.IsInRole("Student") && ViewBag.AverageTotal != 0)
     @if (ViewBag.AverageTotal != null)
     {
         <div align="right">
-            <h6>Average Total: @ViewBag.AverageTotal</h6>
+            <h6>Average Total: @ViewBag.AverageTotal.ToString("F2")</h6>
             <h6>GPA: @GetGPA(ViewBag.AverageTotal)</h6>
             <h6>Letter Grade: @GetLetterGrade(ViewBag.AverageTotal)</h6>
         </div>

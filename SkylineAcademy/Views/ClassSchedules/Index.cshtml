@@ -73,13 +73,6 @@ Html
                 })).Filterable(false);
 
 
-                columns.Add().RenderedAs(model => Html.ActionLink("Details", "Details", new
-                {
-                    id =
-                model.ScheduleId
-                })).Filterable(false);
-
-
                 columns.Add().RenderedAs(model => Html.ActionLink("Delete", "Delete", new
                 {
                     id =

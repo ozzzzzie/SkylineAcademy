@@ -48,13 +48,13 @@ namespace SkylineAcademy.Controllers
 
 
         //Get the classroom schedules
-
-        public IActionResult ClassroomTimetable(int clsroom, string academicYear, string semester)
+        [Authorize]
+        public IActionResult ClassroomTimetable(string academicYear, string semester, int? clsroom)
         {
+            var classrooms = _context.Classrooms.ToList();
+            ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
 
-            // Query to join tables and select required data
-            var query = from enrollement in _context.Enrollements
-                        join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
+            var query = from schedule in _context.ClassSchedules
                         join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
                         join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
                         join classroom in _context.Classrooms on Convert.ToInt32(schedule.ClassroomId) equals classroom.ClassroomId
@@ -64,30 +64,30 @@ namespace SkylineAcademy.Controllers
                         {
                             CourseName = course.Cname,
                             ClassroomNumber = schedule.ClassroomId,
-                            Facilities = classroom.Facilities,
                             TeacherName = teacher.Tfname + " " + teacher.Tlname,
-                            Slot = schedule.Slot.SlotId
+                            Slot = schedule.Slot.SlotId,
+                            Facilities = classroom.Facilities
                         };
 
-            var classrooms = _context.Classrooms.ToList();
-
-            ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
+            if (clsroom.HasValue)
+            {
+                query = query.Where(x => Convert.ToInt16(x.ClassroomNumber) == clsroom.Value);
+            }
 
             return View(query.ToList());
         }
 
 
-
+       // GET: Classrooms/Create
         [Authorize(Roles = "SuperAdmin,Admin")]
-        // GET: Classrooms/Create
-        public IActionResult Create()
+         public IActionResult Create()
         {
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
+
         // POST: Classrooms/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ClassroomId,Capacity,Facilities")] Classroom classroom)
@@ -100,8 +100,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(classroom);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Classrooms/Edit/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Classrooms == null)
@@ -116,10 +117,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(classroom);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Classrooms/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ClassroomId,Capacity,Facilities")] Classroom classroom)
@@ -151,8 +151,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(classroom);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Classrooms/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Classrooms == null)
@@ -169,8 +170,9 @@ namespace SkylineAcademy.Controllers
 
             return View(classroom);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Classrooms/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

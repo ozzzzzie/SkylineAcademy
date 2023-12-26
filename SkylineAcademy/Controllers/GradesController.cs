@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return _context.Grades != null ?
@@ -27,6 +29,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades/Details/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Grades == null)
@@ -45,14 +48,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades/Create
-        //public IActionResult Create()
-        //{
-        //    var enrollements = _context.Enrollements.ToList();
-
-        //    ViewBag.Enrollements = new SelectList(enrollements, "EnrollementId", "EnrollementId");
-
-        //    return View();
-        //}
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public IActionResult Create()
         {
             // Get the current teacher's ID
@@ -77,34 +73,7 @@ namespace SkylineAcademy.Controllers
             return View();
         }
 
-        //public ActionResult TeacherStudentsGrades()
-        //{
-        //    Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
-
-        //    List<ClassSchedule> sched = _context.ClassSchedules
-        //        .Where(x => x.TeacherId == techr.TeacherId.ToString())
-        //        .ToList();
-
-        //    List<Grade> studentsGrades = new List<Grade>();
-
-        //    foreach (ClassSchedule schedule in sched)
-        //    {
-        //        List<Enrollement> enrollements = _context.Enrollements
-        //            .Where(x => x.ScheduleId == schedule.ScheduleId)
-        //            .ToList();
-
-        //        foreach (Enrollement enrollement in enrollements)
-        //        {
-        //            Grade grade = _context.Grades.FirstOrDefault(x => x.EnrollementId == enrollement.EnrollementId);
-        //            if (grade != null)
-        //            {
-        //                studentsGrades.Add(grade);
-        //            }
-        //        }
-        //    }
-
-        //    return View(studentsGrades);
-        //}
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
 
         public ActionResult TeacherStudentsGrades()
         {
@@ -134,6 +103,7 @@ namespace SkylineAcademy.Controllers
             return View(results.ToList());
         }
 
+        [Authorize(Roles = "SuperAdmin,Admin,Student")]
         public ActionResult StudentsGrades()
         {
             Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
@@ -172,8 +142,7 @@ namespace SkylineAcademy.Controllers
 
 
         // POST: Grades/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GradeId,EnrollementId,Midterm,Final,Total,Passedcourse")] Grade grade)
@@ -188,6 +157,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades/Edit/5
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public async Task<IActionResult> Edit(int? id)
         {
             var enrollements = _context.Enrollements.ToList();
@@ -209,8 +179,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // POST: Grades/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("GradeId,EnrollementId,Midterm,Final,Total,Passedcourse")] Grade grade)
@@ -244,6 +213,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // GET: Grades/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Grades == null)
@@ -262,6 +232,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // POST: Grades/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

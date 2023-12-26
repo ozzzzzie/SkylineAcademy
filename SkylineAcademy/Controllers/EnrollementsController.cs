@@ -32,37 +32,14 @@ namespace SkylineAcademy.Controllers
         }
 
         //GET: Student Previous Enrollements
-        [Authorize]
-        //public ActionResult StuPrevEnrollements()
-        //{
-        //    Student stu = _context.Students.Where(x => x.Semail == User.Identity.Name).FirstOrDefault();
-        //    List<Enrollement> stuprevenr = _context.Enrollements.Where(x => x.StudentId == stu.StudentId).ToList();
-
-        //    foreach (Enrollement enrollement in stuprevenr)
-        //    {
-        //        List<ClassSchedule> sched = _context.ClassSchedules.Where(x => x.ScheduleId == enrollement.ScheduleId).ToList();
-
-        //        foreach (ClassSchedule i in sched)
-        //        {
-        //            if (int.TryParse(i.TeacherId, out int teacherId))
-        //            {
-        //                List<Teacher> teacher = _context.Teachers.Where(x => x.TeacherId == teacherId).ToList();
-
-        //            }
-        //        }
-        //    }
-
-        //    return View(stuprevenr);
-        //}
-
+        [Authorize(Roles = "SuperAdmin,Admin,Student")]
         public ActionResult StuPrevEnrollements()
         {
             Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
             if (stu == null)
             {
                 // Handle the case where the student isn't found
-                return View("Error"); // Or another appropriate response
-            }
+                return View("Error");            }
 
             // Retrieve the enrollments and associated schedules, teachers, slots and courses for the student
             var enrollements = from enrollement in _context.Enrollements
@@ -87,9 +64,10 @@ namespace SkylineAcademy.Controllers
                return View(enrollements.ToList());
         }
 
+
         //GET: Student Timetables
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin,Admin,Student")]
         public IActionResult StudentTimetable(string academicYear, string semester)
         {
             // Get the current student's ID
@@ -98,7 +76,7 @@ namespace SkylineAcademy.Controllers
             if (stu == null)
             {
                 // Handle the case where the student isn't found
-                return View("Error"); // Or another appropriate response
+                return View("Error"); 
             }
 
             // Query to join tables and select required data
@@ -123,7 +101,7 @@ namespace SkylineAcademy.Controllers
 
         //GET: Teacher Timetables
 
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public IActionResult TeacherTimetable(string academicYear, string semester)
         {
             // Get the current teacher's ID
@@ -155,7 +133,7 @@ namespace SkylineAcademy.Controllers
         }
 
         //GET: Teacher's Previous Enrollements
-        [Authorize]
+        [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
 
         public ActionResult TeachPrevEnrollements()
         {
@@ -171,15 +149,15 @@ namespace SkylineAcademy.Controllers
             // Query to join tables and select required data
             var query = from enrollement in _context.Enrollements
                         join schedule in _context.ClassSchedules on enrollement.ScheduleId equals schedule.ScheduleId
-                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId  // Assuming CourseId is a compatible type
-                        where Convert.ToInt32(schedule.TeacherId) == tch.TeacherId  // Assuming TeacherId is a string in ClassSchedules
+                        join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId  
+                        where Convert.ToInt32(schedule.TeacherId) == tch.TeacherId  
                         select new
                         {
                             EnrollementId = enrollement.EnrollementId,
                             CourseName = course.Cname,
                             Semester = schedule.Semester,
                             AcademicYear = schedule.Academicyear,
-                            TeacherId = tch.TeacherId  // Directly use tch.TeacherId as it's already known
+                            TeacherId = tch.TeacherId  
                         };
 
             return View(query.ToList());
@@ -214,22 +192,19 @@ namespace SkylineAcademy.Controllers
         // GET: Enrollements/Create
 
         [Authorize(Roles = "SuperAdmin,Admin")]
-
         public IActionResult Create()
         {
             ViewData["ScheduleId"] = new SelectList(_context.ClassSchedules, "ScheduleId", "ScheduleId");
             ViewData["StudentId"] = new SelectList(_context.Students, "StudentId", "StudentId");
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
-
-
-
+      
 
         // POST: Enrollements/Create
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Create([Bind("EnrollementId,StudentId,ScheduleId,EnrollementDate")] Enrollement enrollement)
         {
             var stuEnr = await _context.ClassSchedules.FirstOrDefaultAsync(e => e.ScheduleId == enrollement.ScheduleId);

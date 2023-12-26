@@ -19,16 +19,18 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Departments
+        [Authorize]
         public async Task<IActionResult> Index()
         {
               return _context.Departments != null ? 
                           View(await _context.Departments.ToListAsync()) :
                           Problem("Entity set 'MyDbContext.Departments'  is null.");
         }
-        [Authorize]
+
         // GET: Departments/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -45,16 +47,16 @@ namespace SkylineAcademy.Controllers
 
             return View(department);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Departments/Create
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public IActionResult Create()
         {
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Departments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DepartmentId,Dname,Ddescription")] Department department)
@@ -67,8 +69,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(department);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Departments/Edit/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -83,10 +86,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(department);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Departments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DepartmentId,Dname,Ddescription")] Department department)
@@ -118,8 +120,9 @@ namespace SkylineAcademy.Controllers
             }
             return View(department);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Departments/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -136,8 +139,9 @@ namespace SkylineAcademy.Controllers
 
             return View(department);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Departments/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

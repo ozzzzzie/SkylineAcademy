@@ -12,11 +12,6 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-@*            <div class="form-group">
-                <label asp-for="EnrollementId" class="control-label">Enrollement ID</label>
-                <select asp-for="EnrollementId" class="form-control" asp-items="ViewBag.Enrollements"></select>
-                <span asp-validation-for="EnrollementId" class="text-danger"></span>
-            </div><br />*@
             <div class="form-group">
                 <label asp-for="EnrollementId" class="control-label">Enrollement</label>
                 <select asp-for="EnrollementId" class="form-control" asp-items="ViewBag.Enrollments"></select>

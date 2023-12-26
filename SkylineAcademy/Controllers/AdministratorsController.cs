@@ -19,15 +19,16 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Administrators
+         [Authorize]       
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.Administrators.Include(a => a.Job);
             return View(await myDbContext.ToListAsync());
         }
-        [Authorize]
         // GET: Administrators/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Administrators == null)
@@ -45,17 +46,17 @@ namespace SkylineAcademy.Controllers
 
             return View(administrator);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Administrators/Create
+        [Authorize(Roles = "SuperAdmin,Admin")]
+
         public IActionResult Create()
         {
             ViewData["JobId"] = new SelectList(_context.Jobs, "JobId", "Jname");
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Administrators/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AdministratorId,Afname,Alname,Aaddress,Aphonenumber,JobId,Aemail")] Administrator administrator)
@@ -69,8 +70,8 @@ namespace SkylineAcademy.Controllers
             ViewData["JobId"] = new SelectList(_context.Jobs, "JobId", "Jname", administrator.JobId);
             return View(administrator);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Administrators/Edit/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Administrators == null)
@@ -86,10 +87,8 @@ namespace SkylineAcademy.Controllers
             ViewData["JobId"] = new SelectList(_context.Jobs, "JobId", "Jname", administrator.JobId);
             return View(administrator);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Administrators/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AdministratorId,Afname,Alname,Aaddress,Aphonenumber,JobId,Aemail")] Administrator administrator)
@@ -122,8 +121,8 @@ namespace SkylineAcademy.Controllers
             ViewData["JobId"] = new SelectList(_context.Jobs, "JobId", "Jname", administrator.JobId);
             return View(administrator);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: Administrators/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Administrators == null)
@@ -141,8 +140,8 @@ namespace SkylineAcademy.Controllers
 
             return View(administrator);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: Administrators/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

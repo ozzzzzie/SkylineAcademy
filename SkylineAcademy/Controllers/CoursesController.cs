@@ -19,15 +19,16 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Courses
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.Courses.Include(c => c.Major);
             return View(await myDbContext.ToListAsync());
         }
-        [Authorize]
         // GET: Courses/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Courses == null)
@@ -45,8 +46,9 @@ namespace SkylineAcademy.Controllers
 
             return View(course);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Courses/Create
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public IActionResult Create()
         {
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname");
@@ -54,8 +56,7 @@ namespace SkylineAcademy.Controllers
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CourseId,Cname,MajorId,Credits")] Course course)
@@ -69,8 +70,9 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Courses/Edit/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Courses == null)
@@ -86,10 +88,9 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CourseId,Cname,MajorId,Credits")] Course course)
@@ -122,8 +123,9 @@ namespace SkylineAcademy.Controllers
             ViewData["MajorId"] = new SelectList(_context.Majors, "MajorId", "Mname", course.MajorId);
             return View(course);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: Courses/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Courses == null)
@@ -141,8 +143,9 @@ namespace SkylineAcademy.Controllers
 
             return View(course);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // POST: Courses/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -19,15 +19,17 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: ClassSchedules
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.ClassSchedules.Include(c => c.Slot);
             return View(await myDbContext.ToListAsync());
         }
-        [Authorize]
+
         // GET: ClassSchedules/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ClassSchedules == null)
@@ -45,8 +47,8 @@ namespace SkylineAcademy.Controllers
 
             return View(classSchedule);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Create
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public IActionResult Create()
         {
             // Retrieve the list of courses from data source
@@ -68,10 +70,8 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId");
             return View();
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
@@ -142,8 +142,9 @@ namespace SkylineAcademy.Controllers
             return View(classSchedule);
         }
 
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // GET: ClassSchedules/Edit/5
+        
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ClassSchedules == null)
@@ -156,12 +157,12 @@ namespace SkylineAcademy.Controllers
             {
                 return NotFound();
             }
-            // Retrieve the list of courses from data source
+            // Retrieve the list of courses 
             var courses = _context.Courses.ToList();
-            // Retrieve the list of teachers from data source
+            // Retrieve the list of teachers 
             var teachers = _context.Teachers.ToList();
 
-            // Retrieve the list of classrooms from data source
+            // Retrieve the list of classrooms 
             var classrooms = _context.Classrooms.ToList();
 
             // Pass the lists to the view using the ViewBag
@@ -174,10 +175,8 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,CourseId,AdministratorId,TeacherId,ClassroomId,SlotId,Semester,Academicyear")] ClassSchedule classSchedule)
@@ -265,8 +264,9 @@ namespace SkylineAcademy.Controllers
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId", classSchedule.SlotId);
             return View(classSchedule);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
+
         // GET: ClassSchedules/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ClassSchedules == null)
@@ -284,8 +284,8 @@ namespace SkylineAcademy.Controllers
 
             return View(classSchedule);
         }
-        [Authorize(Roles = "SuperAdmin,Admin")]
         // POST: ClassSchedules/Delete/5
+        [Authorize(Roles = "SuperAdmin,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

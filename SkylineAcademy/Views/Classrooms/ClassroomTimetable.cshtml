@@ -30,19 +30,20 @@
     }
 </p>
 
-<h1 align="center">Classroom Timetable</h1>
+<h1 align="center">Timetable</h1>
 <div style="display: flex; justify-content: space-between;">
     <div>
         <br />
         <h6>Current Selection:</h6>
         <p>
             <strong>Academic Year:</strong> @Context.Request.Query["academicYear"] <br />
-            <strong>Semester:</strong> @Context.Request.Query["semester"]
+            <strong>Semester:</strong> @Context.Request.Query["semester"] <br />
+            <strong>Classroom:</strong> @Context.Request.Query["clsroom"]
         </p>
     </div>
     <div style="display: flex; align-items: center;">
-        <form method="get" asp-action="ClassroomTimetable">
-            <div>
+        <form method="get" asp-action="ClassroomTimetable" style="margin-left: auto;">
+            <div align="right">
                 <label for="academicYear">Academic Year:</label>
                 <select name="academicYear" class="form-control-sm" id="academicYear">
                     @for (int year = 2018; year <= 2028; year++)
@@ -50,21 +51,28 @@
                         <option value="@year">@year</option>
                     }
                 </select>
-
                 <label for="semester">Semester:</label>
                 <select name="semester" class="form-control-sm" id="semester">
                     <option value="A">A</option>
                     <option value="B">B</option>
                 </select>
+                <label for="clsroom">Classroom:</label>
+                <select name="clsroom" class="form-control-sm" id="clsroom">
+                    @foreach (var classroom in ViewBag.Classrooms as SelectList)
+                    {
+                        <option value="@classroom.Value">@classroom.Text</option>
+                    }
+                </select>
             </div>
             <br />
             <div align="right">
-                <button type="submit" class="btn btn-info">View Timetable</button>
+                <button type="submit" class="btn btn-outline-primary">View Timetable</button>
             </div>
         </form>
     </div>
 </div>
 <br />
+
 
 @if (!Model.Any())
 {
