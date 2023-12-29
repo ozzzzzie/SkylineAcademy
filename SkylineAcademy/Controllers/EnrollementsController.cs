@@ -39,7 +39,8 @@ namespace SkylineAcademy.Controllers
             if (stu == null)
             {
                 // Handle the case where the student isn't found
-                return View("Error");            }
+                return View("Error");            
+            }
 
             // Retrieve the enrollments and associated schedules, teachers, slots and courses for the student
             var enrollements = from enrollement in _context.Enrollements

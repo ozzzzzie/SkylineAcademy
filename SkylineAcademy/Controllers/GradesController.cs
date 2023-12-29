@@ -51,24 +51,39 @@ namespace SkylineAcademy.Controllers
         [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public IActionResult Create()
         {
-            // Get the current teacher's ID
-            Teacher tch = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
-            if (tch == null)
+            if (User.IsInRole("Teacher")) 
             {
-                // Handle the case where the teacher isn't found
-                return View("Error");
+                // Get the current teacher's ID
+                Teacher tch = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
+                if (tch == null)
+                {
+                    // Handle the case where the teacher isn't found
+                    return View("Error");
+                }
+
+                var enrollments = _context.Enrollements
+                    .Where(e => _context.ClassSchedules.Any(cs => cs.ScheduleId == e.ScheduleId && Convert.ToInt32(cs.TeacherId) == tch.TeacherId))
+                    .Select(e => new
+                    {
+                        EnrollementId = e.EnrollementId,
+                        Description = $"ID: {e.EnrollementId} - Student: {_context.Students.FirstOrDefault(s => s.StudentId == e.StudentId).Sfname} - Course: {_context.Courses.FirstOrDefault(c => c.CourseId == Convert.ToInt32(e.Schedule.CourseId)).Cname}"
+                    })
+                    .ToList();
+
+                ViewBag.Enrollments = new SelectList(enrollments, "EnrollementId", "Description");
+            } else
+            {
+                var enrollments = _context.Enrollements
+                    .Select(e => new
+                    {
+                        EnrollementId = e.EnrollementId,
+                        Description = $"ID: {e.EnrollementId} - Student: {_context.Students.FirstOrDefault(s => s.StudentId == e.StudentId).Sfname} - Course: {_context.Courses.FirstOrDefault(c => c.CourseId == Convert.ToInt32(e.Schedule.CourseId)).Cname}"
+                    })
+                    .ToList();
+
+                ViewBag.Enrollments = new SelectList(enrollments, "EnrollementId", "Description");
             }
 
-            var enrollments = _context.Enrollements
-                .Where(e => _context.ClassSchedules.Any(cs => cs.ScheduleId == e.ScheduleId && Convert.ToInt32(cs.TeacherId) == tch.TeacherId))
-                .Select(e => new
-                {
-                    EnrollementId = e.EnrollementId,
-                    Description = $"ID: {e.EnrollementId} - Student: {_context.Students.FirstOrDefault(s => s.StudentId == e.StudentId).Sfname} - Course: {_context.Courses.FirstOrDefault(c => c.CourseId == Convert.ToInt32(e.Schedule.CourseId)).Cname}"
-                })
-                .ToList();
-
-            ViewBag.Enrollments = new SelectList(enrollments, "EnrollementId", "Description");
 
             return View();
         }
@@ -77,8 +92,10 @@ namespace SkylineAcademy.Controllers
 
         public ActionResult TeacherStudentsGrades()
         {
+            // Get current teacher's ID
             Teacher techr = _context.Teachers.FirstOrDefault(x => x.Email == User.Identity.Name);
 
+            //Query to link tables and extract information for view
             var results = from Enrollement in _context.Enrollements
                           join Grade in _context.Grades on Enrollement.EnrollementId equals Grade.EnrollementId
                           join Student in _context.Students on Enrollement.StudentId equals Student.StudentId

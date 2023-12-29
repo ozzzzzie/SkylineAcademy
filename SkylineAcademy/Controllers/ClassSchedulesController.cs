@@ -51,12 +51,13 @@ namespace SkylineAcademy.Controllers
         [Authorize(Roles = "SuperAdmin,Admin")]
         public IActionResult Create()
         {
-            // Retrieve the list of courses from data source
+            // Retrieve the list of courses 
             var courses = _context.Courses.ToList();
-            // Retrieve the list of teachers from data source
+
+            // Retrieve the list of teachers 
             var teachers = _context.Teachers.ToList();
 
-            // Retrieve the list of classrooms from data source
+            // Retrieve the list of classrooms 
             var classrooms = _context.Classrooms.ToList();
 
             // Pass the lists to the view using the ViewBag
@@ -68,6 +69,7 @@ namespace SkylineAcademy.Controllers
             ViewBag.Courses = new SelectList(courses, "CourseId", "Cname");
 
             ViewData["SlotId"] = new SelectList(_context.Slots, "SlotId", "SlotId");
+
             return View();
         }
         // POST: ClassSchedules/Create

@@ -58,6 +58,7 @@
                 </select>
                 <label for="clsroom">Classroom:</label>
                 <select name="clsroom" class="form-control-sm" id="clsroom">
+                    <option value="All Classrooms">All Classrooms</option>
                     @foreach (var classroom in ViewBag.Classrooms as SelectList)
                     {
                         <option value="@classroom.Value">@classroom.Text</option>
