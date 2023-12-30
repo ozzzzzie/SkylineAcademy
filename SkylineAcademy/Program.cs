@@ -7,11 +7,12 @@ using SkylineAcademy.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+//adding default connection context
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+//adding identity context
 builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("IdentityContextConnection")
     ));
@@ -53,3 +54,5 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+
