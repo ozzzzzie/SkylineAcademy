@@ -51,9 +51,12 @@ namespace SkylineAcademy.Controllers
         [Authorize]
         public IActionResult ClassroomTimetable(string academicYear, string semester, int? clsroom)
         {
+            //get the classrooms
             var classrooms = _context.Classrooms.ToList();
             ViewBag.Classrooms = new SelectList(classrooms, "ClassroomId", "ClassroomId");
 
+
+            //LINQ query to get all the information for all classrooms
             var query = from schedule in _context.ClassSchedules
                         join course in _context.Courses on Convert.ToInt32(schedule.CourseId) equals course.CourseId
                         join teacher in _context.Teachers on Convert.ToInt32(schedule.TeacherId) equals teacher.TeacherId
@@ -69,6 +72,7 @@ namespace SkylineAcademy.Controllers
                             Facilities = classroom.Facilities
                         };
 
+            //adding a where statement to the query if the user selects a specific classroom
             if (clsroom.HasValue)
             {
                 query = query.Where(x => Convert.ToInt16(x.ClassroomNumber) == clsroom.Value);

@@ -51,6 +51,7 @@ namespace SkylineAcademy.Controllers
         [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
         public IActionResult Create()
         {
+            //customising for teachers to be able to only create grades for their students only.
             if (User.IsInRole("Teacher")) 
             {
                 // Get the current teacher's ID
@@ -61,6 +62,7 @@ namespace SkylineAcademy.Controllers
                     return View("Error");
                 }
 
+                // query to show the students name and course they want to add a grade for
                 var enrollments = _context.Enrollements
                     .Where(e => _context.ClassSchedules.Any(cs => cs.ScheduleId == e.ScheduleId && Convert.ToInt32(cs.TeacherId) == tch.TeacherId))
                     .Select(e => new
@@ -71,7 +73,9 @@ namespace SkylineAcademy.Controllers
                     .ToList();
 
                 ViewBag.Enrollments = new SelectList(enrollments, "EnrollementId", "Description");
-            } else
+            } 
+            //for admins to see the name and course of the students they want to add a grade to if they do need to
+            else
             {
                 var enrollments = _context.Enrollements
                     .Select(e => new
@@ -90,6 +94,7 @@ namespace SkylineAcademy.Controllers
 
         [Authorize(Roles = "SuperAdmin,Admin,Teacher")]
 
+        //for teachers to view the grades of students
         public ActionResult TeacherStudentsGrades()
         {
             // Get current teacher's ID
@@ -120,11 +125,16 @@ namespace SkylineAcademy.Controllers
             return View(results.ToList());
         }
 
+
+        // for students to view their grades
         [Authorize(Roles = "SuperAdmin,Admin,Student")]
         public ActionResult StudentsGrades()
         {
+            //get current students id
             Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
 
+
+            // LINQ query to link tables and extract information for view
             var results = from Enrollement in _context.Enrollements
                           join Grade in _context.Grades on Enrollement.EnrollementId equals Grade.EnrollementId
                           join Student in _context.Students on Enrollement.StudentId equals Student.StudentId
@@ -149,9 +159,11 @@ namespace SkylineAcademy.Controllers
                               StudentLastName = Student.Slname
                           };
 
+            //to display gpa and averages, we need to find the values to work with
             var gradeTotals = results.Select(r => r.Total);
             double averageTotal = (double)(gradeTotals.Any() ? gradeTotals.Average() : 0.0);
 
+            //storing the values in a view bag
             ViewBag.AverageTotal = averageTotal;
 
             return View(results.ToList());

@@ -35,6 +35,7 @@ namespace SkylineAcademy.Controllers
         [Authorize(Roles = "SuperAdmin,Admin,Student")]
         public ActionResult StuPrevEnrollements()
         {
+            //get current student's ID
             Student stu = _context.Students.FirstOrDefault(x => x.Semail == User.Identity.Name);
             if (stu == null)
             {

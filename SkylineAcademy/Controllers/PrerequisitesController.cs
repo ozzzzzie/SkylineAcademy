@@ -29,7 +29,7 @@ namespace SkylineAcademy.Controllers
                 return Problem("Entity set 'MyDbContext.Prerequisites' is null.");
             }
 
-            // Perform a LINQ query to join the Courses and Prerequisites
+            // LINQ query to join the Courses and Prerequisites
             var courseWithPrerequisites = await (from prerequisite in _context.Prerequisites
                                                  join course in _context.Courses on prerequisite.CourseId equals course.CourseId
                                                  join preCourse in _context.Courses on Convert.ToInt32(prerequisite.PrerequisiteId) equals preCourse.CourseId

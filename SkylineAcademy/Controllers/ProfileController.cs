@@ -14,7 +14,7 @@ namespace SkylineAcademy.Controllers
         {
             _context = context;
         }
-        // GET: ProfileController
+        // GET: teacher profile retrival
         [Authorize(Roles = "Teacher")]
         public ActionResult Index()
         {
@@ -22,6 +22,7 @@ namespace SkylineAcademy.Controllers
 
             return View(tprofile);
         }
+        //student profile retrival
         [Authorize(Roles = "Student")]
         public ActionResult StudentIndex()
         {

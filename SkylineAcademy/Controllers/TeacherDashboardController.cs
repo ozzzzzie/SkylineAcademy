@@ -7,8 +7,9 @@ namespace SkylineAcademy.Controllers
 {
     public class TeacherDashboardController : Controller
     {
-        [Authorize(Roles = "SuperAdmin,Teacher")]
         // GET: TeacherDashboardController
+        [Authorize(Roles = "SuperAdmin,Teacher")]
+
         public ActionResult Index()
         {
             return View();
